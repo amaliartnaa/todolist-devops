@@ -146,6 +146,12 @@ export default defineConfig([globalIgnores([
             blankLine: "any",
             prev: ["const", "let", "var"],
             next: ["const", "let", "var"],
-        }],
+            }],
+        "prettier/prettier": [
+            "error",
+                {
+            "endOfLine": "auto"
+            }
+        ]           
     },
 }]);

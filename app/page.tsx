@@ -1,56 +1,52 @@
-import { Link } from "@heroui/link";
-import { Snippet } from "@heroui/snippet";
-import { Code } from "@heroui/code";
-import { button as buttonStyles } from "@heroui/theme";
+"use client";
 
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import { useState } from "react";
+import { format } from "date-fns";
+import { v4 as uuid } from "uuid";
 
-export default function Home() {
+import { Todo } from "./lib/types";
+import { getFilteredSortedTodos } from "./lib/utils";
+
+import { TodoForm } from "@/components/TodoForm";
+import { TodoList } from "@/components/TodoList";
+import { FilterBar } from "@/components/FilterBar";
+
+export default function HomePage() {
+  const [todos, setTodos] = useState<Array<Todo>>([]);
+  const [filterCategory, setFilterCategory] = useState("All");
+  const [sortBy, setSortBy] = useState<"date" | "priority">("date");
+
+  const handleAdd = (
+    text: string,
+    category: string,
+    priority: "low" | "medium" | "high",
+  ) => {
+    const newTodo: Todo = {
+      id: uuid(),
+      text,
+      category,
+      priority,
+      date: format(new Date(), "yyyy-MM-dd"),
+    };
+
+    setTodos([newTodo, ...todos]);
+  };
+
+  const displayedTodos = getFilteredSortedTodos(todos, filterCategory, sortBy);
+
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-xl text-center justify-center">
-        <span className={title()}>Make&nbsp;</span>
-        <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-        <br />
-        <span className={title()}>
-          websites regardless of your design experience.
-        </span>
-        <div className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
-        </div>
-      </div>
+    <main className="max-w-xl mx-auto py-10 px-4 space-y-6">
+      <h1 className="text-2xl font-bold">Todo List</h1>
 
-      <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.docs}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
-      </div>
+      <TodoForm onAdd={handleAdd} />
+      <FilterBar
+        filterCategory={filterCategory}
+        sortBy={sortBy}
+        onFilterChange={setFilterCategory}
+        onSortChange={setSortBy}
+      />
 
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="bordered">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-        </Snippet>
-      </div>
-    </section>
+      <TodoList setTodos={setTodos} todos={displayedTodos} />
+    </main>
   );
 }
