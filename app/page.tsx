@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { v4 as uuid } from "uuid";
+import { Divider } from "@heroui/divider";
 
 import { Todo } from "./lib/types";
 import { getFilteredSortedTodos } from "./lib/utils";
@@ -19,7 +20,7 @@ export default function HomePage() {
   const handleAdd = (
     text: string,
     category: string,
-    priority: "low" | "medium" | "high",
+    priority: "Low" | "Medium" | "High",
   ) => {
     const newTodo: Todo = {
       id: uuid(),
@@ -27,6 +28,7 @@ export default function HomePage() {
       category,
       priority,
       date: format(new Date(), "yyyy-MM-dd"),
+      completed: false,
     };
 
     setTodos([newTodo, ...todos]);
@@ -36,16 +38,16 @@ export default function HomePage() {
 
   return (
     <main className="max-w-xl mx-auto py-10 px-4 space-y-6">
-      <h1 className="text-2xl font-bold">Todo List</h1>
+      <h1 className="text-2xl text-center font-bold">Todo List 📝</h1>
 
       <TodoForm onAdd={handleAdd} />
+      <Divider className="my-4" />
       <FilterBar
         filterCategory={filterCategory}
         sortBy={sortBy}
         onFilterChange={setFilterCategory}
         onSortChange={setSortBy}
       />
-
       <TodoList setTodos={setTodos} todos={displayedTodos} />
     </main>
   );
