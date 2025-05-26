@@ -37,6 +37,40 @@ export function TodoList({ todos, setTodos }: TodoListProps) {
     }
   };
 
+  const handleEdit = (
+    id: string,
+    newText: string,
+    newCategory: string,
+    newPriority: "Low" | "Medium" | "High",
+  ) => {
+    const updated = todos.map((t) =>
+      t.id === id
+        ? {
+            ...t,
+            text: newText,
+            category: newCategory,
+            priority: newPriority,
+          }
+        : t,
+    );
+
+    setTodos(updated);
+  };
+
+  const handleToggle = (id: string) => {
+    const updated = todos.map((t) =>
+      t.id === id ? { ...t, completed: !t.completed } : t,
+    );
+
+    setTodos(updated);
+  };
+
+  const handleDelete = (id: string) => {
+    const updated = todos.filter((t) => t.id !== id);
+
+    setTodos(updated);
+  };
+
   return (
     <DndContext
       collisionDetection={closestCenter}
@@ -49,7 +83,13 @@ export function TodoList({ todos, setTodos }: TodoListProps) {
       >
         <div className="space-y-2">
           {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} />
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              onToggle={handleToggle}
+            />
           ))}
         </div>
       </SortableContext>
