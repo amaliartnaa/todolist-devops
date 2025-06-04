@@ -1,49 +1,36 @@
-# Next.js & HeroUI Template
+# Final Project - CI/CD Deployment
 
-This is a template for creating applications using Next.js 14 (app directory) and HeroUI (v2).
+This repository contains the final project for the PSO (Pengantar Sistem Operasi) course. The focus of this project is to implement and demonstrate **CI/CD deployment** practices in a real-world scenario using modern development tools and environments.
 
-[Try it on CodeSandbox](https://githubbox.com/heroui-inc/heroui/next-app-template)
+## 🔧 Project Overview
 
-## Technologies Used
+In this project, our team built a simple web-based application and integrated a full CI/CD pipeline. This includes:
+- Continuous Integration with GitHub Actions
+- Dockerization of the application
+- Deployment to cloud platforms (e.g., Google Cloud App Engine / Azure App Services)
+- Code quality checks with SonarCloud
+- Version control with Git & GitHub
+- Package management using `pnpm`
 
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [HeroUI v2](https://heroui.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+---
 
-## How to Use
+## 👥 Team Members
 
-### Use the template with create-next-app
+| Name               | Student ID   |
+|--------------------|--------------|
+| Hanin Nuha         | 5026221141   |
+| Ratna Amalia       | 5026221209   |
+| Muhammad Rafa      | 5026221213   |
+| Ishaq Yudha        | 5026221214   |
 
-To create a new project based on this template using `create-next-app`, run the following command:
+---
 
-```bash
-npx create-next-app -e https://github.com/heroui-inc/next-app-template
-```
+## 🚀 CI/CD Pipeline Flow
 
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
-
-```bash
-npm install
-```
-
-### Run the development server
-
-```bash
-npm run dev
-```
-
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
-
-```bash
-public-hoist-pattern[]=*@heroui/*
-```
-
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+```mermaid
+graph LR
+A[Push to GitHub] --> B[GitHub Actions]
+B --> C[Run Tests]
+C --> D[Code Lint & Jest Test]
+D --> E[Build Docker Image]
+E --> F[Deploy to Cloud Platform]
