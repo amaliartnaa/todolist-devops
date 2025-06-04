@@ -1,5 +1,5 @@
 {
-  "name": "next-app-template",
+  "name": "todolist-devops",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix",
+    "typecheck": "tsc --noEmit --incremental false",
     "format": "prettier -w '**/*.{js,ts,tsx,json,css,md}'",
     "format:check": "prettier -c '**/*.{js,ts,tsx,json,css,md}'"
   },
