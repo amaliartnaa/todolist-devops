@@ -1,7 +1,7 @@
 export const categories = ["Work", "Personal", "Study", "Other"];
-export const priorities = ["low", "medium", "high"] as const;
+export const priorities = ["Low", "Medium", "High"] as const;
 export const priorityOrder = {
-  low: 1,
-  medium: 2,
-  high: 3,
+  Low: 1,
+  Medium: 2,
+  High: 3,
 } as const;
