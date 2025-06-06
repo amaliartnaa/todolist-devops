@@ -1,4 +1,3 @@
-// __tests__/TodoList.test.tsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, vi } from "vitest";
