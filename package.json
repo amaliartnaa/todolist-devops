@@ -10,7 +10,9 @@
     "lint": "eslint --fix",
     "typecheck": "tsc --noEmit --incremental false",
     "format": "prettier -w '**/*.{js,ts,tsx,json,css,md}'",
-    "format:check": "prettier -c '**/*.{js,ts,tsx,json,css,md}'"
+    "format:check": "prettier -c '**/*.{js,ts,tsx,json,css,md}'",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -55,6 +57,10 @@
     "@eslint/js": "9.25.1",
     "@next/eslint-plugin-next": "15.3.1",
     "@react-types/shared": "3.29.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
     "@types/node": "22.15.3",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
@@ -73,11 +79,13 @@
     "eslint-plugin-unused-imports": "4.1.4",
     "globals": "16.0.0",
     "husky": "^9.1.7",
+    "jsdom": "^22.1.0",
     "postcss": "8.5.3",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "tailwind-variants": "0.3.0",
     "tailwindcss": "3.4.16",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "vitest": "^3.2.2"
   }
 }
