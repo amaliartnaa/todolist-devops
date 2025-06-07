@@ -8,7 +8,7 @@ WORKDIR /app
 #Dependencies Stage
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile && pnpm add -D @sentry/cli
 
 #Builder stage
 FROM deps AS builder
@@ -17,7 +17,7 @@ RUN pnpm build
 
 #Runner (Production) Stage
 FROM base AS runner
-ENV NODE_ENV production
+ENV NODE_ENV=production
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
