@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 
 import { TodoForm } from "../TodoForm";
-import { categories } from "../../../app/lib/constants";
+import { categories } from "../../lib/constants";
 
 vi.mock("@heroui/button", () => ({
   Button: ({ children, onPress, type, className }: any) => (

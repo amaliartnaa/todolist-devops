@@ -5,12 +5,12 @@ import { format } from "date-fns";
 import { v4 as uuid } from "uuid";
 import { Divider } from "@heroui/divider";
 
-import { Todo } from "../lib/types";
-import { getFilteredSortedTodos } from "../lib/utils";
+import { FilterBar } from "../components/FilterBar";
+import { TodoForm } from "../components/TodoForm";
+import { TodoList } from "../components/TodoList";
 
-import { TodoForm } from "@/components/TodoForm";
-import { TodoList } from "@/components/TodoList";
-import { FilterBar } from "@/components/FilterBar";
+import { getFilteredSortedTodos } from "@/src/lib/utils";
+import { Todo } from "@/src/lib/types";
 
 export default function HomePage() {
   const [todos, setTodos] = useState<Array<Todo>>([]);

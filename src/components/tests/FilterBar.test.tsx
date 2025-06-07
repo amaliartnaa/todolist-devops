@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 
 import { FilterBar } from "../FilterBar";
-import { categories } from "../../../app/lib/constants";
+import { categories } from "../../lib/constants";
 
 vi.mock("@heroui/dropdown", () => ({
   Dropdown: ({ children }: any) => <div>{children}</div>,

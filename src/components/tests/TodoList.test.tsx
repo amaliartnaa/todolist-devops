@@ -4,8 +4,7 @@ import { describe, it, vi } from "vitest";
 import "@testing-library/jest-dom";
 
 import { TodoList } from "../TodoList";
-
-import { Todo } from "@/app/lib/types";
+import { Todo } from "../../lib/types";
 
 const sampleTodos: Array<Todo> = [
   {
