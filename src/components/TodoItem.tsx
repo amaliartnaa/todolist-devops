@@ -15,6 +15,8 @@ import {
 } from "@heroui/dropdown";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { Chip } from "@heroui/chip";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 import { Todo } from "../lib/types";
 
@@ -183,7 +185,9 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
         <Chip className={`text-sm ${priorityColors[todo.priority]}`}>
           {todo.priority}
         </Chip>
-        <Chip className="text-sm">{todo.date}</Chip>
+        <Chip className="text-sm">
+          {format(new Date(todo.date), "dd MMM yyyy, HH:mm", { locale: id })}
+        </Chip>
       </div>
     </div>
   );
