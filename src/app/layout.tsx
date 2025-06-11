@@ -2,6 +2,8 @@ import "../styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
+import { TodosProvider } from "../context/TodosContext";
+
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/src/config/site";
@@ -41,12 +43,14 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex h-screen flex-col">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl flex-grow px-6 pt-16">
-              {children}
-            </main>
-          </div>
+          <TodosProvider>
+            <div className="relative flex flex-col h-screen">
+              <Navbar />
+              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+                {children}
+              </main>
+            </div>
+          </TodosProvider>
         </Providers>
       </body>
     </html>
