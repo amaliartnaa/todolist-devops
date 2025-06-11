@@ -44,10 +44,10 @@ export function TodoForm({ onAdd }: TodoFormProps) {
       />
 
       <div className="flex flex-row justify-between">
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <Dropdown>
             <DropdownTrigger>
-              <Button className="px-4 py-2 border rounded bg-white text-black">
+              <Button className="rounded border bg-white px-4 py-2 text-black">
                 {category || "Select a Category"}
               </Button>
             </DropdownTrigger>
@@ -65,7 +65,7 @@ export function TodoForm({ onAdd }: TodoFormProps) {
 
           <Dropdown>
             <DropdownTrigger>
-              <Button className="px-4 py-2 border rounded bg-white text-black capitalize">
+              <Button className="rounded border bg-white px-4 py-2 capitalize text-black">
                 {priority || "Choose Your Priority"}
               </Button>
             </DropdownTrigger>
@@ -85,7 +85,7 @@ export function TodoForm({ onAdd }: TodoFormProps) {
         </div>
 
         <Button
-          className="bg-blue-500 text-white px-3 py-2 rounded"
+          className="rounded bg-blue-500 px-3 py-2 text-white"
           type="submit"
         >
           Add

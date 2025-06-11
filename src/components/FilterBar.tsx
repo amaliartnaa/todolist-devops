@@ -25,10 +25,10 @@ export function FilterBar({
   onSortChange,
 }: FilterBarProps) {
   return (
-    <div className="flex gap-4 items-center mb-4">
+    <div className="mb-4 flex items-center gap-4">
       <Dropdown>
         <DropdownTrigger>
-          <Button className="px-4 py-2 bg-white text-black border rounded-lg shadow-sm">
+          <Button className="rounded-lg border bg-white px-4 py-2 text-black shadow-sm">
             {filterCategory}
           </Button>
         </DropdownTrigger>
@@ -49,7 +49,7 @@ export function FilterBar({
 
       <Dropdown>
         <DropdownTrigger>
-          <Button className="px-4 py-2 bg-white text-black border rounded-lg shadow-sm">
+          <Button className="rounded-lg border bg-white px-4 py-2 text-black shadow-sm">
             {sortBy === "date" ? "Sort by Date" : "Sort by Priority"}
           </Button>
         </DropdownTrigger>

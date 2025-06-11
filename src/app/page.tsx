@@ -37,8 +37,8 @@ export default function HomePage() {
   const displayedTodos = getFilteredSortedTodos(todos, filterCategory, sortBy);
 
   return (
-    <main className="max-w-xl mx-auto py-10 px-4 space-y-6">
-      <h1 className="text-2xl text-center font-bold">Todo List 📝</h1>
+    <main className="mx-auto max-w-xl space-y-6 px-4 py-10">
+      <h1 className="text-center text-2xl font-bold">Todo List 📝</h1>
 
       <TodoForm onAdd={handleAdd} />
       <Divider className="my-4" />

@@ -81,7 +81,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="border flex flex-col gap-4 p-2 rounded bg-white space-y-1"
+      className="flex flex-col gap-4 space-y-1 rounded border bg-white p-2"
     >
       <div className="flex items-center gap-2">
         <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
@@ -96,8 +96,8 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
           />
         ) : (
           <span
-            className={`font-medium text-black flex-1 ${
-              todo.completed ? "line-through text-gray-400" : ""
+            className={`flex-1 font-medium text-black ${
+              todo.completed ? "text-gray-400 line-through" : ""
             }`}
             onDoubleClick={() => setIsEditing(true)}
           >
@@ -107,7 +107,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
         <Button
           isIconOnly
-          className="bg-blue-500 text-sm px-1"
+          className="bg-blue-500 px-1 text-sm"
           onPress={() => {
             setIsEditing(false);
             setTimeout(() => {
@@ -120,7 +120,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
         <Button
           isIconOnly
-          className="bg-red-500 text-sm px-1"
+          className="bg-red-500 px-1 text-sm"
           onPress={() => onDelete(todo.id)}
         >
           <FaTrashAlt />
@@ -128,11 +128,11 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
       </div>
 
       {isEditing && (
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="flex gap-2">
             <Dropdown className="w-28">
               <DropdownTrigger>
-                <Button className="border px-4 py-2 bg-white text-black">
+                <Button className="border bg-white px-4 py-2 text-black">
                   {editCategory || "Edit The Category"}
                 </Button>
               </DropdownTrigger>
@@ -150,7 +150,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
             <Dropdown className="w-28">
               <DropdownTrigger>
-                <Button className="border px-4 py-2 bg-white text-black">
+                <Button className="border bg-white px-4 py-2 text-black">
                   {editPriority
                     ? capitalize(editPriority)
                     : "Edit Your Priority"}
@@ -170,7 +170,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
           </div>
 
           <Button
-            className="text-sm px-3 py-1 bg-blue-500 text-white rounded"
+            className="rounded bg-blue-500 px-3 py-1 text-sm text-white"
             onPress={handleSave}
           >
             Save
