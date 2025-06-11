@@ -84,4 +84,4 @@ jobs:
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env: production
           status: success
-          environment_url: ${{ steps.deploy.outputs.url }}
+          env_url: ${{ steps.deploy.outputs.url }}
