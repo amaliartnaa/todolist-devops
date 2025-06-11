@@ -47,19 +47,21 @@ Follow these steps to set up the local development environment for making change
 
 ### Prerequisites
 
--   [Node.js](https://nodejs.org/) (v20.x or newer)
--   [pnpm](https://pnpm.io/) (install globally with `npm install -g pnpm`)
--   [Docker Desktop](https://www.docker.com/products/docker-desktop/) (required to test container builds locally)
+- [Node.js](https://nodejs.org/) (v20.x or newer)
+- [pnpm](https://pnpm.io/) (install globally with `npm install -g pnpm`)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (required to test container builds locally)
 
 ### Installation Steps
 
 1.  **Clone the Repository:**
+
     ```bash
     git clone https://github.com/amaliartnaa/todolist-devops.git
     cd todolist-devops
     ```
 
 2.  **Install Dependencies:**
+
     ```bash
     pnpm install
     ```
@@ -70,7 +72,6 @@ Follow these steps to set up the local development environment for making change
     ```
     Open [http://localhost:3000](http://localhost:3000) in your browser to see the application running.
 
-
 ---
 
 ## 🐳 Docker Usage (Local Testing)
@@ -79,6 +80,7 @@ You can simulate the Docker build process used by the CI/CD pipeline on your loc
 
 1.  **Build the Docker Image:**
     Make sure Docker Desktop is running. In your terminal, from the project's root directory, run:
+
     ```bash
     docker build -t todolist-devops:local .
     ```
@@ -89,4 +91,3 @@ You can simulate the Docker build process used by the CI/CD pipeline on your loc
     docker run -p 3000:3000 --name todo-app-local todolist-devops:local
     ```
     The application is now running at `http://localhost:3000` from within a container.
-
