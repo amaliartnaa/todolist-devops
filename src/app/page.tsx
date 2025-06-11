@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { format } from "date-fns";
-import { v4 as uuid } from "uuid";
 import { Divider } from "@heroui/divider";
 
 import { FilterBar } from "../components/FilterBar";
@@ -10,37 +8,36 @@ import { TodoForm } from "../components/TodoForm";
 import { TodoList } from "../components/TodoList";
 
 import { getFilteredSortedTodos } from "@/src/lib/utils";
-import { Todo } from "@/src/lib/types";
+import { useTodos } from "@/src/context/TodosContext";
 
 export default function HomePage() {
-  const [todos, setTodos] = useState<Array<Todo>>([]);
+  const { todos, addTodo } = useTodos();
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState<"date" | "priority">("date");
 
-  const handleAdd = (
-    text: string,
-    category: string,
-    priority: "Low" | "Medium" | "High",
-  ) => {
-    const newTodo: Todo = {
-      id: uuid(),
-      text,
-      category,
-      priority,
-      date: format(new Date(), "yyyy-MM-dd"),
-      completed: false,
-    };
-
-    setTodos([newTodo, ...todos]);
-  };
-
-  const displayedTodos = getFilteredSortedTodos(todos, filterCategory, sortBy);
+  const activeTodos = todos.filter((todo) => !todo.completed);
+  const displayedActiveTodos = getFilteredSortedTodos(
+    activeTodos,
+    filterCategory,
+    sortBy,
+  );
 
   return (
     <main className="mx-auto max-w-xl space-y-6 px-4 py-10">
       <h1 className="text-center text-2xl font-bold">Todo List 📝</h1>
 
-      <TodoForm onAdd={handleAdd} />
+      <TodoForm
+        onAdd={(text, category, priority) =>
+          addTodo({
+            id: crypto.randomUUID(),
+            text,
+            category,
+            priority,
+            date: new Date().toISOString(),
+            completed: false,
+          })
+        }
+      />
       <Divider className="my-4" />
       <FilterBar
         filterCategory={filterCategory}
@@ -48,7 +45,7 @@ export default function HomePage() {
         onFilterChange={setFilterCategory}
         onSortChange={setSortBy}
       />
-      <TodoList setTodos={setTodos} todos={displayedTodos} />
+      <TodoList displayedTodos={displayedActiveTodos} />
     </main>
   );
 }
