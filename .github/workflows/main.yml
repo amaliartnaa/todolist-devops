@@ -61,7 +61,7 @@ jobs:
         id: deployment
         with:
           step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
           env: production
           ref: ${{ github.ref }}
 
@@ -77,7 +77,7 @@ jobs:
         uses: bobheadxi/deployments@v1
         with:
           step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env: production
           status: success
