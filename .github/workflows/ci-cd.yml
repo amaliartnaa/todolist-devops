@@ -96,6 +96,15 @@ jobs:
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }}
 
+      - name: 📦 Create GitHub Deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GH_PAT }}
+          env: production
+          ref: ${{ github.event.workflow_run.head_branch }}
+
       - name: 🚀 Deploy to Cloud Run
         id: deploy
         run: |
