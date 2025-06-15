@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
 
-import { BaseTodo } from "../src/lib/types";
+import { BaseTodo } from "../../lib/types";
 
 export type TodoRow = BaseTodo & RowDataPacket;
