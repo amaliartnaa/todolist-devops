@@ -17,6 +17,7 @@ export const createTodo = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      credentials: "include",
     },
     body: JSON.stringify({ text, category, priority }),
   });
