@@ -80,13 +80,17 @@ jobs:
       # --- Backend ---
       - name: 🐳 Build Backend Docker Image
         run: |
-          echo "Building backend with suffix: $SUFFIX"
+          echo "Building backend image..."
           docker build -f src/app/server/Dockerfile \
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} .
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 📤 Push Backend Docker Image
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }}
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 🚀 Deploy Backend to Cloud Run
         id: deploy-backend
@@ -98,6 +102,8 @@ jobs:
             --allow-unauthenticated \
             --format='value(status.url)')
           echo "backend_url=${BACKEND_URL}" >> $GITHUB_OUTPUT
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       # --- Frontend ---
       - name: 🐳 Build Frontend Docker Image
@@ -105,10 +111,14 @@ jobs:
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }} .
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 📤 Push Frontend Docker Image
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }}
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 🚀 Deploy Frontend to Cloud Run
         id: deploy-frontend
@@ -120,6 +130,8 @@ jobs:
             --allow-unauthenticated \
             --format='value(status.url)')
           echo "frontend_url=${FRONTEND_URL}" >> $GITHUB_OUTPUT
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 🎯 Upload sourcemaps to Sentry (Frontend)
         env:
