@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Divider } from "@heroui/divider";
 
 import { FilterBar } from "../components/FilterBar";
 import { TodoForm } from "../components/TodoForm";
 import { TodoList } from "../components/TodoList";
 import { BaseTodo as Todo } from "../lib/types";
+import { getTodos } from "../lib/api";
 
 import { getFilteredSortedTodos } from "@/src/lib/utils";
 
@@ -14,6 +15,20 @@ export default function HomePage() {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState<"date" | "priority">("date");
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const data = await getTodos();
+
+        setTodos(data);
+      } catch {
+        return;
+      }
+    };
+
+    fetchTodos();
+  }, []);
 
   const displayedTodos = getFilteredSortedTodos(todos, filterCategory, sortBy);
 
