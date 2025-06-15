@@ -66,7 +66,7 @@ jobs:
           step: start
           token: ${{ secrets.GH_PAT }}
           env: production
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: 🚀 Deploy to Cloud Run
         id: deploy
