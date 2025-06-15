@@ -8,7 +8,7 @@ on:
 
 jobs:
   code-checks:
-    name: 🧹 Code Quality Checks
+    name: 🔮 Code Quality Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

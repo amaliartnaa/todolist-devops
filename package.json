@@ -1,12 +1,12 @@
 {
-  "name": "todolist-devops",
+  "name": "todolist-app",
   "version": "0.0.1",
   "private": true,
   "packageManager": "pnpm@10.11.1",
   "scripts": {
     "dev": "concurrently \"pnpm dev:next\" \"pnpm dev:server\"",
     "dev:next": "next dev",
-    "dev:server": "tsx server/index.ts",
+    "dev:server": "tsx src/app/server/index.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix",
