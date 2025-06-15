@@ -103,17 +103,17 @@ jobs:
         run: |
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
-            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${SUFFIX}:${{ github.sha }} .
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-frontend${SUFFIX}:${{ github.sha }} .
 
       - name: 📤 Push Frontend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${SUFFIX}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-frontend${SUFFIX}:${{ github.sha }}
 
       - name: 🚀 Deploy Frontend to Cloud Run
         id: deploy-frontend
         run: |
           FRONTEND_URL=$(gcloud run deploy todo-app${SUFFIX} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${SUFFIX}:${{ github.sha }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-frontend${SUFFIX}:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
