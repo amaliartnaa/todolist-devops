@@ -15,7 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { Todo } from "../lib/types";
+import { BaseTodo as Todo } from "../lib/types";
 
 import { TodoItem } from "./TodoItem";
 

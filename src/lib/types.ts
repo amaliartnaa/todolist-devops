@@ -1,4 +1,4 @@
-export type Todo = {
+export type BaseTodo = {
   id: string;
   text: string;
   category: string;

@@ -16,7 +16,7 @@ import {
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { Chip } from "@heroui/chip";
 
-import { Todo } from "../lib/types";
+import { BaseTodo as Todo } from "../lib/types";
 
 const categories = ["Work", "Personal", "Study", "Other"] as const;
 const priorities = ["Low", "Medium", "High"] as const;
