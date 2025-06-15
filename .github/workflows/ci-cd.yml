@@ -112,6 +112,9 @@ jobs:
           echo "frontend_url=${FRONTEND_URL}" >> $GITHUB_OUTPUT
 
       # --- Backend ---
+      - name: 📁 Copy pnpm-lock.yaml to server
+        run: cp pnpm-lock.yaml server/
+
       - name: 🐳 Build Backend Docker Image
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} ./server
