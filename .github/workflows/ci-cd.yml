@@ -138,7 +138,7 @@ jobs:
           step: start
           token: ${{ secrets.GH_PAT }}
           env: production
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.ref }}
 
       - name: ✅ Finish GitHub Deployment
         uses: bobheadxi/deployments@v1
