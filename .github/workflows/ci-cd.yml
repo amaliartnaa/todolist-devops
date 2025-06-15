@@ -114,7 +114,7 @@ jobs:
       # --- Backend ---
       - name: 🐳 Build Backend Docker Image
         run: |
-          docker build -f server/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} .
+          docker build -f app/server/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} .
 
       - name: 📤 Push Backend Docker Image
         run: |
