@@ -2,7 +2,7 @@ name: CI & CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
     branches: [main]
 
@@ -74,10 +74,32 @@ jobs:
       - name: 🔑 Docker Auth to GCR
         run: gcloud auth configure-docker
 
+      # --- Backend ---
+      - name: 🐳 Build Backend Docker Image
+        run: |
+          docker build -f src/app/server/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} .
+
+      - name: 📤 Push Backend Docker Image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }}
+
+      - name: 🚀 Deploy Backend to Cloud Run
+        id: deploy-backend
+        run: |
+          BACKEND_URL=$(gcloud run deploy todo-backend \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} \
+            --platform managed \
+            --region ${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated \
+            --format='value(status.url)')
+          echo "backend_url=${BACKEND_URL}" >> $GITHUB_OUTPUT
+
       # --- Frontend ---
       - name: 🐳 Build Frontend Docker Image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }} .
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }} .
 
       - name: 🎯 Upload sourcemaps to Sentry (Frontend)
         env:
@@ -110,26 +132,6 @@ jobs:
             --allow-unauthenticated \
             --format='value(status.url)')
           echo "frontend_url=${FRONTEND_URL}" >> $GITHUB_OUTPUT
-
-      # --- Backend ---
-      - name: 🐳 Build Backend Docker Image
-        run: |
-          docker build -f src/app/server/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} .
-
-      - name: 📤 Push Backend Docker Image
-        run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }}
-
-      - name: 🚀 Deploy Backend to Cloud Run
-        id: deploy-backend
-        run: |
-          BACKEND_URL=$(gcloud run deploy todo-backend \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} \
-            --platform managed \
-            --region ${{ secrets.GCP_REGION }} \
-            --allow-unauthenticated \
-            --format='value(status.url)')
-          echo "backend_url=${BACKEND_URL}" >> $GITHUB_OUTPUT
 
       - name: 📦 Create GitHub Deployment
         uses: bobheadxi/deployments@v1

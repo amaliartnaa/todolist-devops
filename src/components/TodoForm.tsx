@@ -4,6 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
+import { Alert } from "@heroui/alert";
 import {
   Dropdown,
   DropdownTrigger,
@@ -12,29 +13,32 @@ import {
 } from "@heroui/dropdown";
 
 import { categories, priorities } from "../lib/constants";
+import { createTodo } from "../lib/api";
 
-type TodoFormProps = {
-  onAdd: (
-    text: string,
-    category: string,
-    priority: "Low" | "Medium" | "High",
-  ) => void;
-};
-
-export function TodoForm({ onAdd }: TodoFormProps) {
+export function TodoForm() {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState<"" | "Low" | "Medium" | "High">("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || !category || !priority) return;
-    onAdd(text, category, priority);
-    setText("");
+    try {
+      await createTodo(text, category, priority);
+      setError(null);
+      setText("");
+      setCategory("");
+      setPriority("");
+    } catch {
+      setError("Failed to create todo");
+    }
   };
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      {error && <Alert color="danger" description={error} title="Error" />}
       <Input
         placeholder="Add a todo"
         radius="sm"
