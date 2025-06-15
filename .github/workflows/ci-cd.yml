@@ -81,17 +81,17 @@ jobs:
       - name: 🐳 Build Backend Docker Image
         run: |
           docker build -f src/app/server/Dockerfile \
-            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${SUFFIX}:${{ github.sha }} .
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${env.SUFFIX}:${{ github.sha }} .
 
       - name: 📤 Push Backend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${SUFFIX}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${env.SUFFIX}:${{ github.sha }}
 
       - name: 🚀 Deploy Backend to Cloud Run
         id: deploy-backend
         run: |
           BACKEND_URL=$(gcloud run deploy todo-backend${SUFFIX} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${SUFFIX}:${{ github.sha }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${env.SUFFIX}:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
@@ -103,17 +103,17 @@ jobs:
         run: |
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
-            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-frontend${SUFFIX}:${{ github.sha }} .
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${env.SUFFIX}:${{ github.sha }} .
 
       - name: 📤 Push Frontend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-frontend${SUFFIX}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${env.SUFFIX}:${{ github.sha }}
 
       - name: 🚀 Deploy Frontend to Cloud Run
         id: deploy-frontend
         run: |
           FRONTEND_URL=$(gcloud run deploy todo-app${SUFFIX} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-frontend${SUFFIX}:${{ github.sha }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${env.SUFFIX}:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
