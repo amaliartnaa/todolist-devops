@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
     [text, category, priority, date, false],
   );
 
-  res.sendStatus(201);
+  res.status(201).json({ message: "Todo created" });
 });
 
 router.put("/:id", async (req, res) => {
