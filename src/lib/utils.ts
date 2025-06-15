@@ -1,5 +1,5 @@
 import { priorityOrder } from "./constants";
-import { Todo } from "./types";
+import { BaseTodo as Todo } from "./types";
 
 export const getFilteredSortedTodos = (
   todos: Array<Todo>,
