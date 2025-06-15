@@ -1,5 +1,7 @@
 "use client";
 
+import type { Todo } from "@/src/lib/types";
+
 import React from "react";
 import {
   DndContext,
@@ -15,27 +17,29 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { Todo } from "../lib/types";
-
 import { TodoItem } from "./TodoItem";
 
+import { useTodos } from "@/src/context/TodosContext";
+
 type TodoListProps = {
-  todos: Array<Todo>;
-  setTodos: (todos: Array<Todo>) => void;
+  displayedTodos?: Array<Todo>;
 };
 
-export function TodoList({ todos, setTodos }: TodoListProps) {
+export function TodoList({ displayedTodos }: TodoListProps) {
+  const { todos, setTodos } = useTodos();
+  const listToRender = displayedTodos ?? todos;
+
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
-    if (active.id !== over?.id) {
-      const oldIndex = todos.findIndex((t) => t.id === active.id);
-      const newIndex = todos.findIndex((t) => t.id === over?.id);
+    if (!over || active.id === over.id) return;
 
-      setTodos(arrayMove(todos, oldIndex, newIndex));
-    }
+    const oldIndex = todos.findIndex((t) => t.id === active.id);
+    const newIndex = todos.findIndex((t) => t.id === over.id);
+
+    setTodos(arrayMove(todos, oldIndex, newIndex));
   };
 
   const handleEdit = (
@@ -72,6 +76,10 @@ export function TodoList({ todos, setTodos }: TodoListProps) {
     setTodos(updated);
   };
 
+  if (!listToRender.length) {
+    return <p className="text-center text-gray-400">No todos to show</p>;
+  }
+
   return (
     <DndContext
       collisionDetection={closestCenter}
@@ -79,11 +87,11 @@ export function TodoList({ todos, setTodos }: TodoListProps) {
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={todos.map((t) => t.id)}
+        items={listToRender.map((t) => t.id)}
         strategy={verticalListSortingStrategy}
       >
         <div className="space-y-2">
-          {todos.map((todo) => (
+          {listToRender.map((todo) => (
             <TodoItem
               key={todo.id}
               todo={todo}
