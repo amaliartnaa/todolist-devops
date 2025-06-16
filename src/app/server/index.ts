@@ -11,16 +11,17 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
-      "https://todo-app-381607765507.asia-southeast2.run.app",
       "https://todo-app-dev-381607765507.asia-southeast2.run.app",
-      "https://todo-backend-dev-kjeipxceka-et.a.run.app",
+      "https://todo-app-381607765507.asia-southeast2.run.app",
+      "http://localhost:3000",
     ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+
+app.options("*", cors());
 
 app.use(express.json());
 
@@ -28,5 +29,4 @@ app.use("/api/todos", todosRouter);
 
 const PORT = process.env.PORT || 3001;
 
-// eslint-disable-next-line no-console
 app.listen(PORT, () => console.log(`🚀 Express running on ${PORT}`));

@@ -6,6 +6,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
 COPY . .
+RUN pnpm build && ls -l .next && ls -l .next/server
 
 EXPOSE 8080
 
