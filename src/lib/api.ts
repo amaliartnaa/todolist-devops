@@ -1,6 +1,7 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getTodos = async () => {
+  console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
   const res = await fetch(`${API_URL}/api/todos`, {
     credentials: "include",
   });
@@ -20,6 +21,7 @@ export const createTodo = async (
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ text, category, priority }),
   });
 
