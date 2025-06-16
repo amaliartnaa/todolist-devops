@@ -4,41 +4,55 @@ import React from "react";
 import { useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { Alert } from "@heroui/alert";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@heroui/dropdown";
+import { addToast } from "@heroui/toast";
 
 import { categories, priorities } from "../lib/constants";
-import { createTodo } from "../lib/api";
 
-export function TodoForm() {
+interface TodoFormProps {
+  onAddTodo: (
+    text: string,
+    category: string,
+    priority: string,
+  ) => Promise<boolean>;
+}
+
+export function TodoForm({ onAddTodo }: TodoFormProps) {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState<"" | "Low" | "Medium" | "High">("");
 
-  const [error, setError] = useState<string | null>(null);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || !category || !priority) return;
-    try {
-      await createTodo(text, category, priority);
-      setError(null);
+
+    const success = await onAddTodo(text, category, priority);
+
+    if (success) {
       setText("");
       setCategory("");
       setPriority("");
-    } catch {
-      setError("Failed to create todo");
+      addToast({
+        title: "Todo created!",
+        description: "Berhasil ditambahkan.",
+        color: "success",
+      });
+    } else {
+      addToast({
+        title: "Failed",
+        description: "Gagal menambahkan todo.",
+        color: "danger",
+      });
     }
   };
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      {error && <Alert color="danger" description={error} title="Error" />}
       <Input
         placeholder="Add a todo"
         radius="sm"

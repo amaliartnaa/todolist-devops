@@ -21,7 +21,7 @@ import { TodoItem } from "./TodoItem";
 
 type TodoListProps = {
   todos: Array<Todo>;
-  setTodos: (todos: Array<Todo>) => void;
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
 export function TodoList({ todos, setTodos }: TodoListProps) {
