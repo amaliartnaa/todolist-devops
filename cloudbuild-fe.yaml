@@ -4,7 +4,7 @@ steps:
       [
         'build',
         '-t',
-        'gcr.io/starry-runner-461807-i2/todo-frontend-dev',
+        'gcr.io/starry-runner-461807-i2/todo-app-dev',
         '--build-arg', 'NEXT_PUBLIC_API_URL=https://todo-backend-dev-381607765507.asia-southeast2.run.app',
         '--build-arg', 'NEXT_PUBLIC_FRONTEND_URL=https://todo-app-dev-381607765507.asia-southeast2.run.app',
         '.'
