@@ -10,7 +10,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "http://localhost:3000",
+      "https://todo-app-381607765507.asia-southeast2.run.app",
+      "https://todo-app-dev-381607765507.asia-southeast2.run.app",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
