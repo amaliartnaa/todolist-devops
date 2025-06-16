@@ -146,23 +146,23 @@ jobs:
             --rewrite
           npx sentry-cli releases finalize ${{ github.sha }}
 
-      - name: 📦 Create GitHub Deployment
-        uses: bobheadxi/deployments@v1
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GH_PAT }}
-          env: ${{ env.ENV_NAME }}
-          ref: ${{ github.ref }}
-          environment: ${{ env.ENV_NAME }}
+      # - name: 📦 Create GitHub Deployment
+      #   uses: bobheadxi/deployments@v1
+      #   id: deployment
+      #   with:
+      #     step: start
+      #     token: ${{ secrets.GH_PAT }}
+      #     env: ${{ env.ENV_NAME }}
+      #     ref: ${{ github.ref }}
+      #     environment: ${{ env.ENV_NAME }}
 
-      - name: ✅ Finish GitHub Deployment
-        uses: bobheadxi/deployments@v1
-        with:
-          step: finish
-          token: ${{ secrets.GH_PAT }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env: ${{ env.ENV_NAME }}
-          environment: ${{ env.ENV_NAME }}
-          status: success
-          env_url: ${{ steps.deploy-frontend.outputs.frontend_url }}
+      # - name: ✅ Finish GitHub Deployment
+      #   uses: bobheadxi/deployments@v1
+      #   with:
+      #     step: finish
+      #     token: ${{ secrets.GH_PAT }}
+      #     deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      #     env: ${{ env.ENV_NAME }}
+      #     environment: ${{ env.ENV_NAME }}
+      #     status: success
+      #     env_url: ${{ steps.deploy-frontend.outputs.frontend_url }}
