@@ -18,12 +18,20 @@ router.post("/", async (req, res) => {
 
   const date = new Date().toISOString().split("T")[0];
 
-  await db.query(
+  const [result] = await db.query<any>(
     "INSERT INTO todos (text, category, priority, date, completed) VALUES (?, ?, ?, ?, ?)",
     [text, category, priority, date, false],
   );
 
-  res.status(201).json({ message: "Todo created" });
+  const insertedId = result.insertId;
+
+  const [rows] = await db.query<TodoRow[]>("SELECT * FROM todos WHERE id = ?", [
+    insertedId,
+  ]);
+
+  const newTodo = rows[0];
+
+  res.status(201).json(newTodo);
 });
 
 router.put("/:id", async (req, res) => {

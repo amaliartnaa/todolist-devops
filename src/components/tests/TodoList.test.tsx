@@ -1,35 +1,63 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { describe, it, vi } from "vitest";
-import "@testing-library/jest-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
 
+import "@testing-library/jest-dom"; // Tambahkan ini
+import { BaseTodo } from "../../lib/types";
 import { TodoList } from "../TodoList";
-import { BaseTodo as Todo } from "../../lib/types";
-
-const sampleTodos: Array<Todo> = [
-  {
-    id: "1",
-    text: "First todo",
-    completed: false,
-    category: "Work",
-    priority: "Medium",
-    date: "2024-01-01",
-  },
-  {
-    id: "2",
-    text: "Second todo",
-    completed: true,
-    category: "Personal",
-    priority: "High",
-    date: "2024-01-02",
-  },
-];
 
 describe("TodoList", () => {
-  it("renders todo items correctly", () => {
-    render(<TodoList setTodos={vi.fn()} todos={sampleTodos} />);
+  const mockTodos: BaseTodo[] = [
+    {
+      id: "1",
+      text: "Todo 1",
+      completed: false,
+      category: "work",
+      priority: "Medium",
+      date: new Date().toISOString(),
+    },
+    {
+      id: "2",
+      text: "Todo 2",
+      completed: true,
+      category: "personal",
+      priority: "High",
+      date: new Date().toISOString(),
+    },
+  ];
 
-    expect(screen.getByText("First todo")).toBeInTheDocument();
-    expect(screen.getByText("Second todo")).toBeInTheDocument();
+  const mockSetTodos = vi.fn();
+  const mockOnEdit = vi.fn().mockResolvedValue(true);
+  const mockOnDelete = vi.fn().mockResolvedValue(undefined);
+
+  it("renders list of todos", () => {
+    render(
+      <TodoList
+        setTodos={mockSetTodos}
+        todos={mockTodos}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+      />,
+    );
+
+    expect(screen.getByText("Todo 1")).toBeInTheDocument();
+    expect(screen.getByText("Todo 2")).toBeInTheDocument();
+  });
+
+  it("calls onToggle when checkbox is clicked", () => {
+    render(
+      <TodoList
+        setTodos={mockSetTodos}
+        todos={mockTodos}
+        onDelete={mockOnDelete}
+        onEdit={mockOnEdit}
+      />,
+    );
+
+    const checkbox = screen.getAllByRole("checkbox")[0];
+
+    fireEvent.click(checkbox);
+
+    expect(mockSetTodos).toHaveBeenCalled();
   });
 });
