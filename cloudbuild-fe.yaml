@@ -10,4 +10,4 @@ steps:
         '.'
       ]
 images:
-  - 'gcr.io/starry-runner-461807-i2/todo-frontend-dev'
+  - 'gcr.io/starry-runner-461807-i2/todo-app-dev'
