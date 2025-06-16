@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import { useEffect, useRef, useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
-import { useEffect, useRef, useState } from "react";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
@@ -16,7 +15,7 @@ import {
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { Chip } from "@heroui/chip";
 
-import { BaseTodo as Todo } from "../lib/types";
+import { BaseTodo } from "../lib/types";
 
 const categories = ["Work", "Personal", "Study", "Other"] as const;
 const priorities = ["Low", "Medium", "High"] as const;
@@ -25,15 +24,16 @@ type Category = (typeof categories)[number];
 type Priority = (typeof priorities)[number];
 
 type TodoItemProps = {
-  todo: Todo;
-  onToggle: (id: string) => void;
-  onDelete: (id: string) => void;
+  todo: BaseTodo;
+  onDelete: (id: string) => Promise<void>;
   onEdit: (
     id: string,
     text: string,
-    category: Category,
-    priority: Priority,
-  ) => void;
+    category: string,
+    priority: string,
+  ) => Promise<boolean>;
+
+  onToggle: (id: string) => void;
 };
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -44,7 +44,7 @@ const priorityColors: Record<Priority, string> = {
   High: "bg-red-200 text-red-800",
 };
 
-export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
+export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: todo.id });
 
@@ -55,24 +55,30 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState("");
-  const [editCategory, setEditCategory] = useState<Category | "">("");
-  const [editPriority, setEditPriority] = useState<Priority | "">("");
+  const [editCategory, setEditCategory] = useState<Category>("Work");
+  const [editPriority, setEditPriority] = useState<Priority>("Low");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isEditing) {
       setEditText(todo.text);
-      setEditCategory("");
-      setEditPriority("");
+      setEditCategory(todo.category as Category);
+      setEditPriority(todo.priority);
       inputRef.current?.focus();
     }
   }, [isEditing]);
 
-  const handleSave = () => {
-    if (!editCategory || !editPriority) return;
-    onEdit(todo.id, editText, editCategory, editPriority);
+  const handleSave = async () => {
+    if (!editText.trim() || !editCategory || !editPriority) return;
+
+    await onEdit(todo.id, editText.trim(), editCategory, editPriority);
+
     setIsEditing(false);
+  };
+
+  const handleDelete = async () => {
+    await onDelete(todo.id);
   };
 
   return (
@@ -108,12 +114,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
         <Button
           isIconOnly
           className="bg-blue-500 px-1 text-sm"
-          onPress={() => {
-            setIsEditing(false);
-            setTimeout(() => {
-              setIsEditing(true);
-            }, 0);
-          }}
+          onPress={() => setIsEditing(true)}
         >
           <FaPencilAlt />
         </Button>
@@ -121,7 +122,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
         <Button
           isIconOnly
           className="bg-red-500 px-1 text-sm"
-          onPress={() => onDelete(todo.id)}
+          onPress={handleDelete}
         >
           <FaTrashAlt />
         </Button>
@@ -133,12 +134,12 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
             <Dropdown className="w-28">
               <DropdownTrigger>
                 <Button className="border bg-white px-4 py-2 text-black">
-                  {editCategory || "Edit The Category"}
+                  {editCategory}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Edit Category"
-                selectedKeys={editCategory ? [editCategory] : []}
+                selectedKeys={[editCategory]}
                 selectionMode="single"
                 onAction={(key) => setEditCategory(key as Category)}
               >
@@ -151,14 +152,12 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
             <Dropdown className="w-28">
               <DropdownTrigger>
                 <Button className="border bg-white px-4 py-2 text-black">
-                  {editPriority
-                    ? capitalize(editPriority)
-                    : "Edit Your Priority"}
+                  {capitalize(editPriority)}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Edit Priority"
-                selectedKeys={editPriority ? [editPriority] : []}
+                selectedKeys={[editPriority]}
                 selectionMode="single"
                 onAction={(key) => setEditPriority(key as Priority)}
               >
@@ -171,6 +170,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
           <Button
             className="rounded bg-blue-500 px-3 py-1 text-sm text-white"
+            isDisabled={!editText.trim()}
             onPress={handleSave}
           >
             Save
