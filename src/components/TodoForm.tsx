@@ -37,11 +37,6 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
       setText("");
       setCategory("");
       setPriority("");
-      addToast({
-        title: "Todo created!",
-        description: "Berhasil ditambahkan.",
-        color: "success",
-      });
     } else {
       addToast({
         title: "Failed",
