@@ -33,4 +33,4 @@ app.get("/", (_, res) => {
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => console.log(`🚀 Express running on ${PORT}`));
+app.listen(PORT);
