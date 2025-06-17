@@ -2,12 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+COPY ../../package.json ../../pnpm-lock.yaml ./
 
-COPY . .
-RUN pnpm build && ls -l .next && ls -l .next/server
+RUN pnpm install --frozen-lockfile --prod
 
-EXPOSE 8080
+COPY ../../. .
 
-CMD ["pnpm", "start"]
+RUN pnpm build:server
+
+EXPOSE 3001
+
+CMD ["pnpm", "start:server"]

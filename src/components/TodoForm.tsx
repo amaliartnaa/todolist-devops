@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@heroui/dropdown";
-import { addToast } from "@heroui/toast";
 
 import { categories, priorities } from "../lib/constants";
 
