@@ -32,7 +32,7 @@ Authenticate with your Google account and set your default project ID.
 
    ```bash
    git clone <repository-url>
-   cd fp-pso
+   cd todolist-devops
    npm install
    ```
 2. **Deploy Backend to Google Cloud Run:**
@@ -97,8 +97,8 @@ Features full CRUD functionality using:
 * **Database:** Firestore
 * **DevOps:** GitHub Actions
 * **Monitoring:** Sentry
-* **Testing:** Jest & Playwright
-* **Code Quality:** Biome, Husky
+* **Testing:** Vitest
+
 
 ---
 
@@ -150,15 +150,12 @@ Frontend (Next.js) ↔ Google Cloud Run (API) ↔ Google Cloud Firestore
 git clone <repository-url>
 cd todolist-devops
 npm install
-npm run db:setup
-npm run dev:full
+npm run dev
 ```
 
 ### Access URLs
 
 * App: `http://localhost:3000`
-* API: `http://localhost:3001`
-* Firestore UI: `http://localhost:4000`
 
 ### Manual Setup
 
