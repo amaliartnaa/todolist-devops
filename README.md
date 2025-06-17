@@ -1,17 +1,245 @@
-# Final Project - CI/CD Deployment
+# Notes Library (CRUD App) - Final Project PSO
 
-This repository contains the final project for the PSO (Pengantar Sistem Operasi) course. The focus of this project is to implement and demonstrate **CI/CD deployment** practices in a real-world scenario using modern development tools and environments.
+This is a comprehensive Notes Library application built with **Next.js 14**, **Tailwind CSS**, **Google Cloud Run**, and **Google Cloud Firestore**. This project demonstrates modern full-stack development with a cloud-native serverless architecture, integrated monitoring with **Sentry**, and robust CI/CD pipelines.
 
-## 🔧 Project Overview
+---
 
-In this project, our team built a simple web-based application and integrated a full CI/CD pipeline. This includes:
+## 🚀 Quick Start Guide
 
-- **Continuous Integration & Deployment:** Fully automated using GitHub Actions.
-- **Containerization:** The application is containerized using Docker for consistent and portable deployments.
-- **Cloud Deployment:** Automatically deployed to Google Cloud Run after a successful merge to the `main` branch.
-- **Automated Quality Checks:** Code quality is enforced through automated jobs for ESLint, Prettier (formatting), TypeScript (type checking), and Vitest (unit testing).
-- **Version Control:** Managed with Git and hosted on GitHub.
-- **Package Management:** Handled efficiently using `pnpm`
+### Step-by-Step Setup
+
+#### Initial Setup
+
+1. **Obtain Google Cloud Credentials:**
+
+   * You'll need a Google Cloud project with appropriate permissions. For production, consider using a **service account** with specific roles (e.g., Cloud Run Developer, Cloud Firestore User, Secret Manager Secret Accessor).
+2. **Install Google Cloud CLI (gcloud):**
+
+   * Follow the official [Google Cloud documentation](https://cloud.google.com/sdk/docs/install) for your operating system to install `gcloud CLI`.
+
+#### Configure Google Cloud CLI
+
+```bash
+gcloud auth login
+gcloud config set project <your-gcp-project-id>
+```
+
+Authenticate with your Google account and set your default project ID.
+
+#### Setup Infrastructure (Manual Deployment)
+
+1. **Clone and Setup Project:**
+
+   ```bash
+   git clone <repository-url>
+   cd fp-pso
+   npm install
+   ```
+2. **Deploy Backend to Google Cloud Run:**
+
+   * Build your backend application (if separate from the frontend).
+   * **Deploy your Cloud Run service:**
+
+     ```bash
+     gcloud run deploy <your-service-name> --source . --region <your-gcp-region> --allow-unauthenticated --project <your-gcp-project-id>
+     ```
+3. **Create Google Cloud Firestore Database:**
+
+   * Navigate to the **Firestore** section in your Google Cloud Console.
+   * Create a new database (either Native Mode or Datastore Mode).
+   * Set up initial collections or data if necessary.
+4. **Copy Google Cloud Run Service URL for Environment:**
+
+   * After `gcloud run deploy`, the output will provide your Cloud Run service URL.
+   * Copy this URL and add it to your `.env.local` file:
+
+     ```bash
+     echo "NEXT_PUBLIC_CLOUD_RUN_API_URL=https://your-cloud-run-url" >> .env.local
+     ```
+
+#### Setup GitHub Secrets (for CI/CD)
+
+Add the following secrets to your GitHub repository (Settings > Secrets and variables > Actions):
+
+* `GCP_PROJECT_ID`
+* `GCP_SA_KEY`
+* `GCP_REGION`
+* `SENTRY_DSN`
+
+---
+
+## 📚 Comprehensive Documentation
+
+📖 **[Comprehensive Final Project PSO Documentation](https://www.google.com/search?q=link-to-your-full-documentation-here)**
+
+Covers:
+
+* 📸 Screenshots and demo
+* 🔍 System architecture analysis
+* 🚀 CI/CD pipeline explanation
+* 📊 Performance & monitoring
+* 🌟 Project learnings
+
+---
+
+## 🎯 Project Overview
+
+Features full CRUD functionality using:
+
+* **Frontend:** Next.js 14, TypeScript, Tailwind CSS
+* **Backend:** Google Cloud Run
+* **Database:** Firestore
+* **DevOps:** GitHub Actions
+* **Monitoring:** Sentry
+* **Testing:** Jest & Playwright
+* **Code Quality:** Biome, Husky
+
+---
+
+## 🚀 Features
+
+* CRUD operations
+* Responsive design with dark mode
+* Real-time search
+* Serverless architecture
+* CI/CD automation
+* Local development with Firestore emulator
+* Sentry integration
+
+---
+
+## 🏗️ Architecture
+
+```
+Frontend (Next.js) ↔ Google Cloud Run (API) ↔ Google Cloud Firestore
+                                  ↓
+                            Cloud Logging
+                                  ↓
+                               Sentry
+```
+
+### Tech Stack
+
+* **Frontend:** Next.js 14, TypeScript, Tailwind CSS
+* **Backend:** Express.js on Cloud Run
+* **DevOps:** GitHub Actions, Docker
+* **Monitoring:** Sentry, Cloud Logging
+
+---
+
+## 📋 Prerequisites
+
+* Node.js 18+
+* Docker & Docker Compose
+* Google Cloud account & CLI
+* Git
+* Sentry account
+
+---
+
+## 🚀 Local Development
+
+### Quick Setup
+
+```bash
+git clone <repository-url>
+cd fp-pso
+npm install
+npm run db:setup
+npm run dev:full
+```
+
+### Access URLs
+
+* App: `http://localhost:3000`
+* API: `http://localhost:3001`
+* Firestore UI: `http://localhost:4000`
+
+### Manual Setup
+
+```bash
+npm run db:start
+npm run api:start
+npm run dev
+```
+
+---
+
+## ☁️ Google Cloud Services Utilized
+
+### Core Services
+
+* **Firestore** - Notes data
+* **Cloud Run** - Serverless API
+* **Cloud Storage** - Artifact storage
+
+### Monitoring & Logging
+
+* **Sentry** - Error tracking
+* **Cloud Logging** - Logs for debugging
+
+### Security & Access
+
+* IAM Roles
+* Service Accounts
+
+---
+
+## 🧪 Testing & Development
+
+```bash
+npm run dev:full
+npm run db:setup
+npm run db:start
+npm run db:stop
+
+# Testing
+npm test
+npm run test:watch
+npm run smoke
+
+# Code Quality
+npm run lint
+npm run format
+npm run typecheck
+```
+
+---
+
+## 🚀 Deployment & CI/CD
+
+### GitHub Actions
+
+* CI: Testing, building, artifact upload
+* CD: Deployment to Cloud Run (staging/prod)
+
+### Manual Deployment
+
+```bash
+npm run build
+# Deploy frontend/backend as per setup
+```
+
+---
+
+## 🔧 Common Issues
+
+* Cloud Run issues: Check logs, ingress settings
+* Firestore: Check rules, logs
+* API: Test endpoint directly
+* GitHub Actions: Check secrets and logs
+* Sentry: Verify DSN and initialization
+
+---
+
+## 📄 API Endpoints
+
+| Method | Endpoint    | Description        |
+| ------ | ----------- | ------------------ |
+| GET    | /notes      | Get all notes      |
+| GET    | /notes/{id} | Get note by ID     |
+| PUT    | /notes      | Create/Update note |
+| DELETE | /notes/{id} | Delete note by ID  |
 
 ---
 
@@ -26,68 +254,8 @@ In this project, our team built a simple web-based application and integrated a 
 
 ---
 
-## 🚀 CI/CD Pipeline Flow
+## 📄 License
 
-The core of this project is an automated pipeline configured using **GitHub Actions**. The entire process, from code submission to a running application in the cloud, is managed through workflows defined in the `.github/workflows/` directory.
+This project is open source and available under the **MIT License**.
 
-```mermaid
-graph LR
-A[Push to GitHub] --> B[GitHub Actions]
-B --> C[Run Tests]
-C --> D[Code Lint & Vitest Test]
-D --> E[Build Docker Image]
-E --> F[Deploy to Cloud Platform]
-```
-
----
-
-## ⚙️ Setup & Contribution (Local Development)
-
-Follow these steps to set up the local development environment for making changes or adding features.
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v20.x or newer)
-- [pnpm](https://pnpm.io/) (install globally with `npm install -g pnpm`)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (required to test container builds locally)
-
-### Installation Steps
-
-1.  **Clone the Repository:**
-
-    ```bash
-    git clone https://github.com/amaliartnaa/todolist-devops.git
-    cd todolist-devops
-    ```
-
-2.  **Install Dependencies:**
-
-    ```bash
-    pnpm install
-    ```
-
-3.  **Run the Development Server:**
-    ```bash
-    pnpm dev
-    ```
-    Open [http://localhost:3000](http://localhost:3000) in your browser to see the application running.
-
----
-
-## 🐳 Docker Usage (Local Testing)
-
-You can simulate the Docker build process used by the CI/CD pipeline on your local machine.
-
-1.  **Build the Docker Image:**
-    Make sure Docker Desktop is running. In your terminal, from the project's root directory, run:
-
-    ```bash
-    docker build -t todolist-devops:local .
-    ```
-
-2.  **Run the Docker Container:**
-    After the image is successfully built, run a container from it:
-    ```bash
-    docker run -p 3000:3000 --name todo-app-local todolist-devops:local
-    ```
-    The application is now running at `http://localhost:3000` from within a container.
+**Notes Library Final Project PSO** - Modern full-stack development with Google Cloud-native serverless infrastructure.
