@@ -27,6 +27,10 @@ app.use(express.json());
 
 app.use("/api/todos", todosRouter);
 
+app.get("/", (_, res) => {
+  res.send("🚀 Todo backend is up and running!");
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => console.log(`🚀 Express running on ${PORT}`));
