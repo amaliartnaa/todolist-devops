@@ -10,6 +10,6 @@ COPY ../../../. .
 
 RUN pnpm exec tsc -p tsconfig.server.json
 
-EXPOSE 3001
+EXPOSE 8080
 
 CMD ["pnpm", "start:server"]
