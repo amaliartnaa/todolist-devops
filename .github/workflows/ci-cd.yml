@@ -75,7 +75,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: 🔑 Docker Auth to GCR
-        run: gcloud auth configure-docker
+        run: gcloud auth configure-docker asia-southeast2-docker.pkg.dev
 
       # --- Backend ---
       - name: 🐳 Build Backend Docker Image
