@@ -95,14 +95,17 @@ jobs:
       - name: 🚀 Deploy Backend to Cloud Run
         id: deploy-backend
         run: |
-          BACKEND_URL=$(gcloud run deploy todo-backend-new$SUFFIX \
+          echo "Deploying backend..."
+          gcloud run deploy todo-backend$SUFFIX \
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
-            --format='value(status.url)')
-          echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
+            --format='value(status.url)' > backend_url.txt
+
+          BACKEND_URL=$(cat backend_url.txt)
           echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
+          echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
         env:
           SUFFIX: ${{ env.SUFFIX }}
       
