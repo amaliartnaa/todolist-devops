@@ -4,10 +4,10 @@ steps:
       [
         'build',
         '-t',
-        'gcr.io/starry-runner-461807/todo-backend-dev',
+        'gcr.io/starry-runner-461807-i2/todo-backend-dev:v1.0.1',
         '-f',
-        'src/app/server/Dockerfile',
+        'Dockerfile',
         '.'
       ]
 images:
-  - 'gcr.io/starry-runner-461807/todo-backend-dev'
+  - 'gcr.io/starry-runner-461807-i2/todo-backend-dev:v1.0.1'

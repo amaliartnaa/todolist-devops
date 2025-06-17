@@ -21,6 +21,8 @@ app.use(
   }),
 );
 
+// console.log("🚧 CORS middleware configured");
+
 app.options("*", cors());
 
 app.use(express.json());
