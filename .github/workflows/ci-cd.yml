@@ -101,7 +101,8 @@ jobs:
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
             --format='value(status.url)')
-          echo "backend_url=${BACKEND_URL}" >> $GITHUB_OUTPUT
+          echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
+          echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
         env:
           SUFFIX: ${{ env.SUFFIX }}
 
@@ -109,11 +110,12 @@ jobs:
       - name: 🐳 Build Frontend Docker Image
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
+            --build-arg NEXT_PUBLIC_API_URL=$BACKEND_URL \
             --build-arg NEXT_PUBLIC_FRONTEND_URL=https://todo-app${{ env.SUFFIX }}-381607765507.asia-southeast2.run.app \
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }} .
         env:
           SUFFIX: ${{ env.SUFFIX }}
+          BACKEND_URL: ${{ env.BACKEND_URL }}
 
       - name: 📤 Push Frontend Docker Image
         run: |
