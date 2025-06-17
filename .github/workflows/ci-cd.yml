@@ -109,7 +109,7 @@ jobs:
         env:
           SUFFIX: ${{ env.SUFFIX }}
       
-      - name: 🕵️ Debug API URL
+      - name: 🕵️‍♀️ Debug API URL
         run: |
           echo "BACKEND_URL = $BACKEND_URL"
           echo "SUFFIX = $SUFFIX"
