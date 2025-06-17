@@ -8,7 +8,7 @@
     "dev:next": "next dev",
     "dev:server": "tsx src/app/server/index.ts",
     "build": "next build && pnpm build:server",
-    "build:server": "tsc",
+    "build:server": "tsc -p tsconfig.server.json",
     "start": "next start",
     "start:server": "node dist/app/server/index.ts",
     "lint": "eslint --fix",
