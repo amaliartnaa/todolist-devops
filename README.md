@@ -98,6 +98,7 @@ Features full CRUD functionality using:
 * **DevOps:** GitHub Actions
 * **Monitoring:** Sentry
 * **Testing:** Vitest
+* **Code Quality:** Husky
 
 
 ---
