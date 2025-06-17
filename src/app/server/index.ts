@@ -25,9 +25,7 @@ app.options("*", cors());
 
 app.use(express.json());
 
-app.get("/api/todos", (_, res) => {
-  res.send("✅ Direct route works!");
-});
+app.use("/api/todos", todosRouter);
 
 app.get("/", (_, res) => {
   res.send("🚀 Todo backend is up and running!");

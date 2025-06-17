@@ -5,12 +5,8 @@ import { TodoRow } from "../types";
 
 const router = Router();
 
-router.get("/", async (_, res) => {
-  const [rows] = await db.query<TodoRow[]>(
-    "SELECT * FROM todos ORDER BY date DESC",
-  );
-
-  res.json(rows);
+router.get("/", (_, res) => {
+  res.json({ message: "✅ todosRouter works!" });
 });
 
 router.post("/", async (req, res) => {
