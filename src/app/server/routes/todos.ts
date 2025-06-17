@@ -3,10 +3,31 @@ import { Router } from "express";
 import db from "../db";
 import { TodoRow } from "../types";
 
+import { BaseTodo } from "@/src/lib/types";
+
 const router = Router();
 
 router.get("/", (_, res) => {
-  res.json({ message: "✅ todosRouter works!" });
+  const todos: Array<BaseTodo> = [
+    {
+      id: "1",
+      text: "Belajar GitHub Actions",
+      category: "Coding",
+      priority: "High",
+      date: "2025-06-17",
+      completed: false,
+    },
+    {
+      id: "2",
+      text: "Review PR teman",
+      category: "Work",
+      priority: "Medium",
+      date: "2025-06-18",
+      completed: true,
+    },
+  ];
+
+  res.json(todos);
 });
 
 router.post("/", async (req, res) => {
