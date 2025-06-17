@@ -4,10 +4,10 @@
   "compilerOptions": {
     "noEmit": false,
     "module": "commonjs",
-    "outDir": "./dist/app/server",
-    "rootDir": "./src/app/server"
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
 
-  "include": ["src/app/server/**/*.ts"],
+  "include": ["src/app/server/**/*.ts", "src/lib/**/*.ts"],
   "exclude": ["node_modules"]
 }
