@@ -105,6 +105,11 @@ jobs:
           echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
         env:
           SUFFIX: ${{ env.SUFFIX }}
+      
+      - name: 🕵️ Debug API URL
+        run: |
+          echo "BACKEND_URL = $BACKEND_URL"
+          echo "SUFFIX = $SUFFIX"
 
       # --- Frontend ---
       - name: 🐳 Build Frontend Docker Image
