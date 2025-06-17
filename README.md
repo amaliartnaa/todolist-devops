@@ -61,10 +61,16 @@ Authenticate with your Google account and set your default project ID.
 
 Add the following secrets to your GitHub repository (Settings > Secrets and variables > Actions):
 
+* `DB_HOST`
+* `DB_NAME`
+* `DB_PASSWORD`
+* `DB_PORT`
+* `DB_USER`
 * `GCP_PROJECT_ID`
-* `GCP_SA_KEY`
 * `GCP_REGION`
-* `SENTRY_DSN`
+* `GCP_SA_KEY`
+* `GH_PAT`
+* `SENTRY_AUTH_TOKEN`
 
 ---
 
