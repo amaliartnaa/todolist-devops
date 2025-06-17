@@ -8,7 +8,7 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
 
 COPY ../../. .
 
-RUN pnpm exec tsc -p ./tsconfig.server.json
+RUN pnpm exec tsc -p ../../tsconfig.server.json
 
 EXPOSE 3001
 
