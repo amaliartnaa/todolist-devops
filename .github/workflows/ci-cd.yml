@@ -82,13 +82,13 @@ jobs:
         run: |
           echo "Building backend image..."
           docker build -f src/app/server/Dockerfile \
-            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} .
+             -t asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/todolist-devops-repo/todo-backend$SUFFIX:${{ github.sha }} .
         env:
           SUFFIX: ${{ env.SUFFIX }}
 
       - name: 📤 Push Backend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }}
+          docker push asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/todolist-devops-repo/todo-backend$SUFFIX:${{ github.sha }}
         env:
           SUFFIX: ${{ env.SUFFIX }}
 
@@ -96,7 +96,7 @@ jobs:
         id: deploy-backend
         run: |
           BACKEND_URL=$(gcloud run deploy todo-backend$SUFFIX \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} \
+            --image asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/todolist-devops-repo/todo-backend$SUFFIX:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
@@ -111,13 +111,13 @@ jobs:
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
             --build-arg NEXT_PUBLIC_FRONTEND_URL=https://todo-app${{ env.SUFFIX }}-381607765507.asia-southeast2.run.app \
-            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }} .
+            -t asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/todolist-devops-repo/todo-app$SUFFIX:${{ github.sha }} .
         env:
           SUFFIX: ${{ env.SUFFIX }}
 
       - name: 📤 Push Frontend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }}
+          docker push asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/todolist-devops-repo/todo-app$SUFFIX:${{ github.sha }}
         env:
           SUFFIX: ${{ env.SUFFIX }}
 
@@ -125,7 +125,7 @@ jobs:
         id: deploy-frontend
         run: |
           FRONTEND_URL=$(gcloud run deploy todo-app$SUFFIX \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }} \
+            --image asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/todolist-devops-repo/todo-app$SUFFIX:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
