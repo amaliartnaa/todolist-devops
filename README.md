@@ -121,7 +121,6 @@ Frontend (Next.js) ↔ Google Cloud Run (API) ↔ Google Cloud Firestore
 ### Tech Stack
 
 * **Frontend:** Next.js 14, TypeScript, Tailwind CSS
-* **Backend:** Express.js on Cloud Run
 * **DevOps:** GitHub Actions, Docker
 * **Monitoring:** Sentry, Cloud Logging
 
@@ -143,7 +142,7 @@ Frontend (Next.js) ↔ Google Cloud Run (API) ↔ Google Cloud Firestore
 
 ```bash
 git clone <repository-url>
-cd fp-pso
+cd todolist-devops
 npm install
 npm run db:setup
 npm run dev:full
@@ -232,16 +231,6 @@ npm run build
 
 ---
 
-## 📄 API Endpoints
-
-| Method | Endpoint    | Description        |
-| ------ | ----------- | ------------------ |
-| GET    | /notes      | Get all notes      |
-| GET    | /notes/{id} | Get note by ID     |
-| PUT    | /notes      | Create/Update note |
-| DELETE | /notes/{id} | Delete note by ID  |
-
----
 
 ## 👥 Team Members
 
