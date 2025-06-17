@@ -78,6 +78,21 @@ jobs:
         run: gcloud auth configure-docker
 
       # --- Backend ---
+      - name: 🪧 Build Backend
+        run: pnpm exec tsc -p tsconfig.server.json
+
+      - name: 🎯 Upload sourcemaps to Sentry (Backend)
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: institut-teknologi-sepuluh--sr
+          SENTRY_PROJECT: todolist-devops
+        run: |
+          npx sentry-cli releases new ${{ github.sha }}
+          npx sentry-cli releases files ${{ github.sha }} upload-sourcemaps dist \
+            --url-prefix "~/dist" \
+            --rewrite
+          npx sentry-cli releases finalize ${{ github.sha }}
+
       - name: 🐳 Build Backend Docker Image
         run: |
           echo "Building backend image..."
@@ -109,11 +124,6 @@ jobs:
           echo "DEBUG: backend_url = $BACKEND_URL"
         env:
           SUFFIX: ${{ env.SUFFIX }}
-      
-      - name: 🕵️‍♀️ Debug API URL
-        run: |
-          echo "BACKEND_URL = $BACKEND_URL"
-          echo "SUFFIX = $SUFFIX"
 
       # --- Frontend ---
       - name: 🐳 Build Frontend Docker Image

@@ -1,12 +1,21 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import * as Sentry from "@sentry/node";
 
 import todosRouter from "./routes/todos";
 
 dotenv.config();
 
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+});
+
 const app = express();
+
+app.use(Sentry.Handlers.requestHandler());
 
 app.use(
   cors({
@@ -22,9 +31,7 @@ app.use(
 );
 
 app.options("*", cors());
-
 app.use(express.json());
-
 app.use("/api/todos", todosRouter);
 
 app.get("/", (_, res) => {
@@ -32,5 +39,7 @@ app.get("/", (_, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
+app.use(Sentry.Handlers.errorHandler());
 
 app.listen(PORT);

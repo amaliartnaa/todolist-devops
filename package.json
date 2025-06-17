@@ -45,6 +45,7 @@
     "@react-aria/ssr": "3.9.8",
     "@react-aria/visually-hidden": "3.8.22",
     "@sentry/nextjs": "^9.27.0",
+    "@sentry/node": "^7.92.0",
     "clsx": "2.1.1",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",

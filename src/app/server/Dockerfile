@@ -2,14 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY ../../../package.json ../../../pnpm-lock.yaml ../../../tsconfig.server.json ./
+COPY ./dist ./dist
+COPY ./package.json ./pnpm-lock.yaml ./
 
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
-
-COPY ../../../. .
-
-RUN pnpm exec tsc -p tsconfig.server.json
+RUN npm install -g pnpm && pnpm install --prod
 
 EXPOSE 8080
 
-CMD ["pnpm", "start:server"]
+CMD ["node", "dist/index.js"]
