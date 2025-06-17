@@ -81,7 +81,7 @@ jobs:
       - name: 🪧 Build Backend
         run: | 
           pnpm exec tsc -p tsconfig.server.json
-          ls -la
+          ls -la dist
 
       - name: 🎯 Upload sourcemaps to Sentry (Backend)
         env:
