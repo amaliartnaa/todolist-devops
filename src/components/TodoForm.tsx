@@ -38,11 +38,6 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
       setCategory("");
       setPriority("");
     } else {
-      addToast({
-        title: "Failed",
-        description: "Gagal menambahkan todo.",
-        color: "danger",
-      });
     }
   };
 
