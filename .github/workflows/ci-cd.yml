@@ -96,7 +96,7 @@ jobs:
       - name: 🐳 Build Backend Docker Image
         run: |
           echo "Building backend image..."
-          docker build -f src/app/server/Dockerfile \
+          docker build -f src/app/server/Dockerfile
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} .
         env:
           SUFFIX: ${{ env.SUFFIX }}
