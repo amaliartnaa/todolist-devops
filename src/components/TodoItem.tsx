@@ -120,13 +120,13 @@ export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
           <FaPencilAlt />
         </Button>
 
-        <Button
+        {/* <Button
           isIconOnly
           className="bg-red-500 px-1 text-sm"
           onPress={handleDelete}
         >
           <FaTrashAlt />
-        </Button>
+        </Button> */}
       </div>
 
       {isEditing && (
