@@ -85,6 +85,9 @@ jobs:
         run: gcloud auth configure-docker
 
       # --- Backend ---
+      - name: 🔧 Build Backend
+        run: pnpm exec tsc -p tsconfig.server.json
+
       - name: 🎯 Upload sourcemaps to Sentry (Backend)
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
