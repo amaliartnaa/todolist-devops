@@ -78,10 +78,8 @@ jobs:
         run: gcloud auth configure-docker
 
       # --- Backend ---
-      - name: 🪧 Build Backend
-        run: | 
-          pnpm exec tsc -p tsconfig.server.json
-          ls -la dist
+      - name: 🛠️ Build backend (tsc)
+        run: pnpm build
 
       - name: 🎯 Upload sourcemaps to Sentry (Backend)
         env:
