@@ -78,12 +78,6 @@ jobs:
         run: gcloud auth configure-docker
 
       # --- Backend ---
-      - name: 🛠️ Build backend (tsc)
-        run: pnpm build
-
-      - name: ✅ Cek dist exist
-        run: ls -la dist/app/server && stat dist/app/server/index.js
-
       - name: 🎯 Upload sourcemaps to Sentry (Backend)
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

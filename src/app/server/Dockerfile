@@ -1,12 +1,21 @@
-FROM node:18-alpine
+FROM node:20
 
 WORKDIR /app
 
-COPY dist/app/server ./dist
 COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
-RUN npm install -g pnpm && pnpm install --prod --frozen-lockfile
+COPY tsconfig.server.json ./
+COPY src ./src
 
-EXPOSE 8080
+RUN pnpm exec tsc -p tsconfig.server.json
 
-CMD ["node", "dist/app/server/index.js"]
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY --from=0 /app/dist/app/server ./dist
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install --prod
+
+CMD ["node", "dist/app/serverindex.js"]
