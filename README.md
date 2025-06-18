@@ -15,6 +15,8 @@ A full-stack To Do List application built with **Next.js 14**, **Tailwind CSS**,
 
 ---
 
+For complete documentation and deeper technical insights into the project, see the [Project Documentation](https://docs.google.com/document/d/1OMCJaaHLdUsa0jNEEthkL5GyQ2sGiMqul9H1ulFk6FY/edit?usp=sharing).
+
 ## 🏗️ Project Structure
 
 ```
