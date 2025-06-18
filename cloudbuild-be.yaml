@@ -1,13 +1,13 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
-        'build',
-        '-t',
-        'gcr.io/starry-runner-461807-i2/todo-backend-dev:v1.0.1',
-        '-f',
-        'Dockerfile',
-        '.'
+        "build",
+        "-t",
+        "gcr.io/starry-runner-461807-i2/todo-backend-dev:v1.0.1",
+        "-f",
+        "Dockerfile",
+        ".",
       ]
 images:
-  - 'gcr.io/starry-runner-461807-i2/todo-backend-dev:v1.0.1'
+  - "gcr.io/starry-runner-461807-i2/todo-backend-dev:v1.0.1"

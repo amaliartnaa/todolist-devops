@@ -13,8 +13,8 @@
     "start:server": "node dist/app/server/index.js",
     "lint": "eslint --fix",
     "typecheck": "tsc --noEmit --incremental false",
-    "format": "prettier -w '**/*.{js,ts,tsx,json,css,md}'",
-    "format:check": "prettier -c '**/*.{js,ts,tsx,json,css,md}'",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest"
   },
