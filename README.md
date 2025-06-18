@@ -1,67 +1,160 @@
-# Notes Library (CRUD App) - Final Project PSO
+# To Do List App (CRUD App) - Final Project PSO
 
-This is a comprehensive Notes Library application built with **Next.js 14**, **Tailwind CSS**, **Google Cloud Run**, and **Google Cloud Firestore**. This project demonstrates modern full-stack development with a cloud-native serverless architecture, integrated monitoring with **Sentry**, and robust CI/CD pipelines.
+A full-stack To Do List application built with **Next.js 14**, **Tailwind CSS**, **Node.js**, **Docker**, and **Google Cloud Run**. It features robust CI/CD using GitHub Actions and Sentry integration for monitoring.
 
 ---
 
-## 🚀 Quick Start Guide
+## 👥 Team Members
 
-### Step-by-Step Setup
+| Name          | Student ID |
+| ------------- | ---------- |
+| Hanin Nuha    | 5026221141 |
+| Ratna Amalia  | 5026221209 |
+| Muhammad Rafa | 5026221213 |
+| Ishaq Yudha   | 5026221214 |
 
-#### Initial Setup
+---
 
-1. **Obtain Google Cloud Credentials:**
-   
-   * You'll need a Google Cloud project with appropriate permissions. For production, consider using a **service account** with specific roles (e.g., Cloud Run Developer, Cloud Firestore User, Secret Manager Secret Accessor).
+For complete documentation and deeper technical insights into the project, see the [Project Documentation](https://docs.google.com/document/d/1OMCJaaHLdUsa0jNEEthkL5GyQ2sGiMqul9H1ulFk6FY/edit?usp=sharing).
 
-2. **Install Google Cloud CLI (gcloud):**
-   
-   * Follow the official [Google Cloud documentation](https://cloud.google.com/sdk/docs/install) for your operating system to install `gcloud CLI`.
+## 🏗️ Project Structure
 
-#### Configure Google Cloud CLI
-
-```bash
-gcloud auth login
-gcloud config set project starry-runner-461807
+```
+.
+├── .github/workflows/
+│   └── ci-cd.yml
+├── .husky/
+│   ├── commit-msg
+│   ├── post-merge
+│   └── pre-commit
+├── .vscode/
+│   └── settings.json
+├── dist/
+│   └── app/server/
+│       ├── routes/
+│       │   └── todos.js
+│       ├── db.js
+│       ├── index.js
+│       └── types.js
+├── public/
+│   ├── favicon.ico
+│   ├── next.svg
+│   └── vercel.svg
+├── src/
+│   ├── app/
+│   │   ├── server/
+│   │   │   ├── Dockerfile
+│   │   │   ├── routes/
+│   │   │   │   └── todos.ts
+│   │   │   ├── db.ts
+│   │   │   ├── index.ts
+│   │   │   └── types.ts
+│   │   ├── error.tsx
+│   │   ├── global-error.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── providers.tsx
+│   ├── components/
+│   │   ├── FilterBar.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── TodoForm.tsx
+│   │   ├── TodoItem.tsx
+│   │   ├── TodoList.tsx
+│   │   └── primitives.ts
+│   ├── config/
+│   │   ├── fonts.ts
+│   │   └── site.ts
+│   ├── lib/
+│   │   ├── api.ts
+│   │   ├── constants.ts
+│   │   ├── types.ts
+│   │   └── utils.ts
+│   ├── styles/
+│   │   └── globals.css
+│   └── types/
+│       └── index.ts
+├── tests/
+│   └── TodoList.test.tsx
+├── .dockerignore
+├── .env
+├── .env.dev
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── README.md
+├── cloudbuild-be.yaml
+├── cloudbuild-fe.yaml
+├── commitlint.config.js
+├── eslint.config.mjs
+├── instrumentation-client.ts
+├── instrumentation.ts
+├── next.config.js
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.js
+├── sentry.edge.config.ts
+├── sentry.server.config.ts
+├── setupTests.js
+├── tailwind.config.js
+├── tsconfig.json
+├── tsconfig.server.json
+├── vitest.config.ts
 ```
 
-Authenticate with your Google account and set your default project ID.
+---
 
-#### Setup Infrastructure (Manual Deployment)
+## 🚀 Quick Setup
 
-1. **Clone and Setup Project:**
+### 1. Clone the repository
 
-   ```bash
-   git clone https://github.com/amaliartnaa/todolist-devops.git
-   cd todolist-devops
-   npm install
-   ```
-2. **Deploy Backend to Google Cloud Run:**
-  
-   * Build your backend application (if separate from the frontend).
-  
-   * **Deploy your Cloud Run service:**
-     ```bash
-     gcloud run deploy todo-app --source . --region asia-southeast2 --allow-unauthenticated --project starry-runner-461807
-     ```
-3. **Create Google Cloud Firestore Database:**
-  
-   * Navigate to the **Firestore** section in your Google Cloud Console.
-   * Create a new database (either Native Mode or Datastore Mode).
-   * Set up initial collections or data if necessary.
+```bash
+git clone https://github.com/amaliartnaa/todolist-devops.git
+cd todolist-devops
+pnpm install
+```
 
-4. **Copy Google Cloud Run Service URL for Environment:**
-   
-   * After `gcloud run deploy`, the output will provide your Cloud Run service URL.
-   * Copy this URL and add it to your `.env.local` file:
-  
-     ```bash
-     echo "NEXT_PUBLIC_CLOUD_RUN_API_URL=https://todo-app-381607765507.asia-southeast2.run.app/" >> .env.local
-     ```
+### 2. Setup .env
 
-#### Setup GitHub Secrets (for CI/CD)
+```bash
+echo "NEXT_PUBLIC_API_URL=http://localhost:8080" >> .env.local
+```
 
-Add the following secrets to your GitHub repository (Settings > Secrets and variables > Actions):
+### 3. Start the services (Frontend + Backend)
+
+```bash
+pnpm dev
+```
+
+This runs both frontend and backend concurrently using:
+
+* `pnpm dev:next` for frontend
+* `pnpm dev:server` for backend
+
+---
+
+## ⚖️ Docker Setup
+
+### Frontend Build
+
+```bash
+docker build -t todo-frontend .
+docker run -p 3000:3000 todo-frontend
+```
+
+### Backend Build
+
+```bash
+docker build -f src/app/server/Dockerfile -t todo-backend .
+docker run -p 8080:8080 todo-backend
+```
+
+---
+
+## 🤖 CI/CD with GitHub Actions
+
+### Secrets Required
+
+Make sure the following secrets are configured in your GitHub repository:
 
 * `DB_HOST`
 * `DB_NAME`
@@ -74,168 +167,95 @@ Add the following secrets to your GitHub repository (Settings > Secrets and vari
 * `GH_PAT`
 * `SENTRY_AUTH_TOKEN`
 
----
+### Workflow Triggers
 
-## 📚 Comprehensive Documentation
+CI will run on:
 
-📖 **[Comprehensive Final Project PSO Documentation](https://docs.google.com/document/d/1OMCJaaHLdUsa0jNEEthkL5GyQ2sGiMqul9H1ulFk6FY/edit?usp=sharing)**
+* Push to `main`
+* Pull requests to `main`
 
-Covers:
-
-* 📸 Screenshots and demo
-* 🔍 System architecture analysis
-* 🚀 CI/CD pipeline explanation
-* 📊 Performance & monitoring
-* 🌟 Project learnings
+See `.github/workflows/ci-cd.yml` for full implementation.
 
 ---
 
-## 🎯 Project Overview
-
-Features full CRUD functionality using:
-
-* **Frontend:** Next.js 14, TypeScript, Tailwind CSS
-* **Backend:** Google Cloud Run
-* **Database:** Firestore
-* **DevOps:** GitHub Actions
-* **Monitoring:** Sentry
-* **Testing:** Vitest
-* **Code Quality:** Husky
-
-
----
-
-## 🚀 Features
-
-* CRUD operations
-* Responsive design with dark mode
-* Real-time search
-* Serverless architecture
-* CI/CD automation
-* Local development with Firestore emulator
-* Sentry integration
-
----
-
-## 🏗️ Architecture
-
-```
-Frontend (Next.js) ↔ Google Cloud Run (API) ↔ Google Cloud Firestore
-                                  ↓
-                            Cloud Logging
-                                  ↓
-                               Sentry
-```
-
-### Tech Stack
-
-* **Frontend:** Next.js 14, TypeScript, Tailwind CSS
-* **DevOps:** GitHub Actions, Docker
-* **Monitoring:** Sentry, Cloud Logging
-
----
-
-## 📋 Prerequisites
-
-* Node.js 18+
-* Docker & Docker Compose
-* Google Cloud account & CLI
-* Git
-* Sentry account
-
----
-
-## 🚀 Local Development
-
-### Quick Setup
+## 🔬 Testing & Linting
 
 ```bash
-git clone https://github.com/amaliartnaa/todolist-devops.git
-cd todolist-devops
-pnpm install
-pnpm dev
+pnpm test            # Run tests
+pnpm test:watch      # Watch mode
+pnpm lint            # Run eslint --fix
+pnpm format          # Run Prettier
+pnpm format:check    # Prettier check only
+pnpm typecheck       # TypeScript check
 ```
 
-### Access URLs
-
-* App: `http://localhost:3000`
-
 ---
 
-## ☁️ Google Cloud Services Utilized
-
-### Core Services
-
-* **Firestore** - Notes data
-* **Cloud Run** - Serverless API
-* **Cloud Storage** - Artifact storage
-
-### Monitoring & Logging
-
-* **Sentry** - Error tracking
-* **Cloud Logging** - Logs for debugging
-
-### Security & Access
-
-* IAM Roles
-* Service Accounts
-
----
-
-## 🧪 Testing & Development
+## 🌐 Production Deployment (Manual)
 
 ```bash
-# Run unit tests using Vitest
-pnpm test
+gcloud builds submit --config cloudbuild-fe.yaml
+# or for backend
+gcloud builds submit --config cloudbuild-be.yaml
+```
 
-# Watch mode for tests
-pnpm run test:watch
+Check the Cloud Run dashboard for deployed URL.
 
-# Lint and fix code style issues
-pnpm run lint
+---
 
-# Format code using Prettier
-pnpm run format
+## 📊 Monitoring with Sentry
 
-# Type check using TypeScript
-pnpm run typecheck
+Set up Sentry in both `sentry.server.config.ts` and `sentry.edge.config.ts`.
+Ensure the DSN is provided via `.env` or GitHub secrets.
+
+---
+
+## ✨ Features
+
+* Full CRUD (Create, Read, Update, Delete)
+* Responsive UI with Tailwind CSS
+* Dark mode support
+* CI/CD GitHub Actions pipeline
+* Dockerized backend and frontend
+* Error monitoring via Sentry
+
+---
+
+## 🔄 Architecture Overview
+
+```
+GitHub Push/PR
+       ↓
+GitHub Actions CI (lint, typecheck, test)
+       ↓
+Docker Build (Backend & Frontend)
+       ↓
+Push ke GCR
+       ↓
+Deploy ke Cloud Run
+       ↓
+  App Live (API + FE)
+       ↓
+  Sentry Logging
 ```
 
 ---
 
-## 🚀 Deployment & CI/CD
+## 🔧 Tech Stack
 
-### GitHub Actions
-
-* CI: Testing, building, artifact upload
-* CD: Deployment to Cloud Run (staging/prod)
-
-### Manual Deployment
-
-```bash
-pnpm run build
-# Deploy frontend/backend as per setup
-```
+* **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+* **Backend**: Node.js, Express
+* **Deployment**: Google Cloud Run, Cloud Build
+* **CI/CD**: GitHub Actions
+* **Monitoring**: Sentry
+* **Testing**: Vitest
 
 ---
 
-## 🔧 Common Issues
+## ❓ Issues Encountered
 
-* Cloud Run issues: Check logs, ingress settings
-* Firestore: Check rules, logs
-* API: Test endpoint directly
-* GitHub Actions: Check secrets and logs
-* Sentry: Verify DSN and initialization
+* Initial setup using Jest failed due to an infinite loop. We opted to switch to **Vitest** which worked smoothly.
+* During development, integration between frontend and backend encountered CORS issues and connectivity problems, which were gradually resolved through debugging from local to production.
+* There was an issue where the frontend URL in production did not reflect the latest changes made in development. We fixed this by enhancing the deployment logic in our workflow.
 
 ---
-
-
-## 👥 Team Members
-
-| Name          | Student ID |
-| ------------- | ---------- |
-| Hanin Nuha    | 5026221141 |
-| Ratna Amalia  | 5026221209 |
-| Muhammad Rafa | 5026221213 |
-| Ishaq Yudha   | 5026221214 |
-

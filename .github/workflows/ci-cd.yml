@@ -20,12 +20,9 @@ jobs:
           node-version: 20
           cache: "pnpm"
       - run: pnpm install
-      - name: ⬣ Run ESLint
-        run: pnpm lint
-      - name: ʦ Run TypeScript Check
-        run: pnpm typecheck
-      - name: 💅 Run Prettier
-        run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm format:check
 
   test:
     name: 🧪 Run Unit Tests
@@ -52,6 +49,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: 🧠 Set ENV_NAME and SUFFIX
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "ENV_NAME=production" >> $GITHUB_ENV
+            echo "SUFFIX=" >> $GITHUB_ENV
+          else
+            echo "ENV_NAME=dev" >> $GITHUB_ENV
+            echo "SUFFIX=-dev" >> $GITHUB_ENV
+          fi
 
       - uses: pnpm/action-setup@v2
         with:
@@ -92,65 +99,48 @@ jobs:
 
       - name: 🐳 Build Backend Docker Image
         run: |
-          echo "Building backend image..."
           docker build -f src/app/server/Dockerfile \
-            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} .
-        env:
-          SUFFIX: ${{ env.SUFFIX }}
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${{ env.SUFFIX }}:${{ github.sha }} .
 
       - name: 📤 Push Backend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }}
-        env:
-          SUFFIX: ${{ env.SUFFIX }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${{ env.SUFFIX }}:${{ github.sha }}
 
       - name: 🚀 Deploy Backend to Cloud Run
         id: deploy-backend
         run: |
-          echo "Deploying backend..."
-          BACKEND_URL=$(gcloud run deploy todo-backend$SUFFIX \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} \
+          BACKEND_URL=$(gcloud run deploy todo-backend${{ env.SUFFIX }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend${{ env.SUFFIX }}:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
             --set-env-vars DB_HOST=${{ secrets.DB_HOST }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }} \
             --format='value(status.url)')
-
           echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
           echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
-          echo "DEBUG: backend_url = $BACKEND_URL"
-        env:
-          SUFFIX: ${{ env.SUFFIX }}
 
       # --- Frontend ---
       - name: 🐳 Build Frontend Docker Image
         run: |
-          echo "Building Frontend with BACKEND_URL=${{ steps.deploy-backend.outputs.backend_url }}"
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
             --build-arg NEXT_PUBLIC_FRONTEND_URL=https://todo-app${{ env.SUFFIX }}-381607765507.asia-southeast2.run.app \
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${{ env.SUFFIX }}:${{ github.sha }} .
-        env:
-          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 📤 Push Frontend Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }}
-        env:
-          SUFFIX: ${{ env.SUFFIX }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${{ env.SUFFIX }}:${{ github.sha }}
 
       - name: 🚀 Deploy Frontend to Cloud Run
         id: deploy-frontend
         run: |
-          FRONTEND_URL=$(gcloud run deploy todo-app$SUFFIX \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }} \
+          FRONTEND_URL=$(gcloud run deploy todo-app${{ env.SUFFIX }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${{ env.SUFFIX }}:${{ github.sha }} \
             --platform managed \
             --region ${{ secrets.GCP_REGION }} \
             --allow-unauthenticated \
             --format='value(status.url)')
           echo "frontend_url=${FRONTEND_URL}" >> $GITHUB_OUTPUT
-        env:
-          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 🎯 Upload sourcemaps to Sentry (Frontend)
         env:
