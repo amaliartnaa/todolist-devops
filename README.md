@@ -11,17 +11,18 @@ This is a comprehensive Notes Library application built with **Next.js 14**, **T
 #### Initial Setup
 
 1. **Obtain Google Cloud Credentials:**
-
+   
    * You'll need a Google Cloud project with appropriate permissions. For production, consider using a **service account** with specific roles (e.g., Cloud Run Developer, Cloud Firestore User, Secret Manager Secret Accessor).
-2. **Install Google Cloud CLI (gcloud):**
 
+2. **Install Google Cloud CLI (gcloud):**
+   
    * Follow the official [Google Cloud documentation](https://cloud.google.com/sdk/docs/install) for your operating system to install `gcloud CLI`.
 
 #### Configure Google Cloud CLI
 
 ```bash
 gcloud auth login
-gcloud config set project <your-gcp-project-id>
+gcloud config set project starry-runner-461807
 ```
 
 Authenticate with your Google account and set your default project ID.
@@ -31,30 +32,31 @@ Authenticate with your Google account and set your default project ID.
 1. **Clone and Setup Project:**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/amaliartnaa/todolist-devops.git
    cd todolist-devops
    npm install
    ```
 2. **Deploy Backend to Google Cloud Run:**
-
+  
    * Build your backend application (if separate from the frontend).
+  
    * **Deploy your Cloud Run service:**
-
      ```bash
-     gcloud run deploy <your-service-name> --source . --region <your-gcp-region> --allow-unauthenticated --project <your-gcp-project-id>
+     gcloud run deploy todo-app --source . --region asia-southeast2 --allow-unauthenticated --project starry-runner-461807
      ```
 3. **Create Google Cloud Firestore Database:**
-
+  
    * Navigate to the **Firestore** section in your Google Cloud Console.
    * Create a new database (either Native Mode or Datastore Mode).
    * Set up initial collections or data if necessary.
-4. **Copy Google Cloud Run Service URL for Environment:**
 
+4. **Copy Google Cloud Run Service URL for Environment:**
+   
    * After `gcloud run deploy`, the output will provide your Cloud Run service URL.
    * Copy this URL and add it to your `.env.local` file:
-
+  
      ```bash
-     echo "NEXT_PUBLIC_CLOUD_RUN_API_URL=https://your-cloud-run-url" >> .env.local
+     echo "NEXT_PUBLIC_CLOUD_RUN_API_URL=https://todo-app-381607765507.asia-southeast2.run.app/" >> .env.local
      ```
 
 #### Setup GitHub Secrets (for CI/CD)
@@ -76,7 +78,7 @@ Add the following secrets to your GitHub repository (Settings > Secrets and vari
 
 ## 📚 Comprehensive Documentation
 
-📖 **[Comprehensive Final Project PSO Documentation](https://www.google.com/search?q=link-to-your-full-documentation-here)**
+📖 **[Comprehensive Final Project PSO Documentation](https://docs.google.com/document/d/1OMCJaaHLdUsa0jNEEthkL5GyQ2sGiMqul9H1ulFk6FY/edit?usp=sharing)**
 
 Covers:
 
@@ -148,23 +150,15 @@ Frontend (Next.js) ↔ Google Cloud Run (API) ↔ Google Cloud Firestore
 ### Quick Setup
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/amaliartnaa/todolist-devops.git
 cd todolist-devops
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ### Access URLs
 
 * App: `http://localhost:3000`
-
-### Manual Setup
-
-```bash
-npm run db:start
-npm run api:start
-npm run dev
-```
 
 ---
 
@@ -191,20 +185,20 @@ npm run dev
 ## 🧪 Testing & Development
 
 ```bash
-npm run dev:full
-npm run db:setup
-npm run db:start
-npm run db:stop
+# Run unit tests using Vitest
+pnpm test
 
-# Testing
-npm test
-npm run test:watch
-npm run smoke
+# Watch mode for tests
+pnpm run test:watch
 
-# Code Quality
-npm run lint
-npm run format
-npm run typecheck
+# Lint and fix code style issues
+pnpm run lint
+
+# Format code using Prettier
+pnpm run format
+
+# Type check using TypeScript
+pnpm run typecheck
 ```
 
 ---
@@ -219,7 +213,7 @@ npm run typecheck
 ### Manual Deployment
 
 ```bash
-npm run build
+pnpm run build
 # Deploy frontend/backend as per setup
 ```
 
@@ -245,10 +239,3 @@ npm run build
 | Muhammad Rafa | 5026221213 |
 | Ishaq Yudha   | 5026221214 |
 
----
-
-## 📄 License
-
-This project is open source and available under the **MIT License**.
-
-**Notes Library Final Project PSO** - Modern full-stack development with Google Cloud-native serverless infrastructure.
