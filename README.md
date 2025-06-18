@@ -222,11 +222,19 @@ Ensure the DSN is provided via `.env` or GitHub secrets.
 ## 🔄 Architecture Overview
 
 ```
-Frontend (Next.js) ↔ Backend (Node.js API on Cloud Run) ↔ Custom DB
-                                     ↓
-                                  Logging
-                                     ↓
-                                   Sentry
+GitHub Push/PR
+       ↓
+GitHub Actions CI (lint, typecheck, test)
+       ↓
+Docker Build (Backend & Frontend)
+       ↓
+Push ke GCR
+       ↓
+Deploy ke Cloud Run
+       ↓
+  App Live (API + FE)
+       ↓
+  Sentry Logging
 ```
 
 ---
@@ -242,11 +250,10 @@ Frontend (Next.js) ↔ Backend (Node.js API on Cloud Run) ↔ Custom DB
 
 ---
 
-## ❓ Troubleshooting
+## ❓ Issues Encountered
 
-* Cloud Run not working? Check ingress, port, and image.
-* Frontend not connecting? Double-check `NEXT_PUBLIC_API_URL`.
-* CI failing? Recheck GitHub secrets and workflow logs.
-* Sentry not logging? Validate DSN config.
+* Initial setup using Jest failed due to an infinite loop. We opted to switch to **Vitest** which worked smoothly.
+* During development, integration between frontend and backend encountered CORS issues and connectivity problems, which were gradually resolved through debugging from local to production.
+* There was an issue where the frontend URL in production did not reflect the latest changes made in development. We fixed this by enhancing the deployment logic in our workflow.
 
 ---
