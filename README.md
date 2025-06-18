@@ -1,4 +1,4 @@
-# Notes Library (CRUD App) - Final Project PSO
+# To Do list App (CRUD App) - Final Project PSO
 
 This is a comprehensive To Do List application built with **Next.js 14**, **Tailwind CSS**, **Google Cloud Run**, and **Google Cloud Firestore**. This project demonstrates modern full-stack development with a cloud-native serverless architecture, integrated monitoring with **Sentry**, and robust CI/CD pipelines.
 
