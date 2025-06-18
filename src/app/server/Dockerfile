@@ -18,4 +18,6 @@ COPY --from=0 /app/dist/app/server ./dist
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --prod
 
+EXPOSE 8080
+
 CMD ["node", "dist/app/server/index.js"]
