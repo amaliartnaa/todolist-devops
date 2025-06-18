@@ -42,4 +42,6 @@ const PORT = process.env.PORT || 8080;
 
 app.use(Sentry.Handlers.errorHandler());
 
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`✅ Server listening on port ${PORT}`);
+});
