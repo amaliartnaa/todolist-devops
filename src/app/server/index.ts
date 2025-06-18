@@ -43,5 +43,5 @@ const PORT = process.env.PORT || 8080;
 app.use(Sentry.Handlers.errorHandler());
 
 app.listen(PORT, () => {
-  console.log(`✅ Server listening on port ${PORT}`);
+  Sentry.captureMessage(`✅ Server listening on port ${PORT}`);
 });
