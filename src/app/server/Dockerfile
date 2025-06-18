@@ -18,4 +18,4 @@ COPY --from=0 /app/dist/app/server ./dist
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --prod
 
-CMD ["node", "dist/app/serverindex.js"]
+CMD ["node", "dist/app/server/index.js"]
