@@ -14,7 +14,7 @@
     "lint": "eslint --fix",
     "typecheck": "tsc --noEmit --incremental false",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --check '**/*.{js,ts,tsx,json,css,md}'",
     "test": "vitest run",
     "test:watch": "vitest"
   },
