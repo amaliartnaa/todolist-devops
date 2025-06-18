@@ -1,6 +1,6 @@
 # Notes Library (CRUD App) - Final Project PSO
 
-This is a comprehensive Notes Library application built with **Next.js 14**, **Tailwind CSS**, **Google Cloud Run**, and **Google Cloud Firestore**. This project demonstrates modern full-stack development with a cloud-native serverless architecture, integrated monitoring with **Sentry**, and robust CI/CD pipelines.
+This is a comprehensive To Do List application built with **Next.js 14**, **Tailwind CSS**, **Google Cloud Run**, and **Google Cloud Firestore**. This project demonstrates modern full-stack development with a cloud-native serverless architecture, integrated monitoring with **Sentry**, and robust CI/CD pipelines.
 
 ---
 
