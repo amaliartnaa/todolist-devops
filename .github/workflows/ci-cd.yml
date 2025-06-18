@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install
       - name: ⬣ Run ESLint
         run: pnpm lint
@@ -38,12 +38,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install
       - run: pnpm test
 
   deploy:
     name: 🚀 Deploy to Google Cloud Run
+    env:
+      ENV_NAME: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
+      SUFFIX: ${{ github.ref_name == 'main' && '' || '-dev' }}
     needs: [code-checks, test]
     if: success()
     runs-on: ubuntu-latest
@@ -57,7 +60,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - run: pnpm install --frozen-lockfile
 
@@ -74,10 +77,80 @@ jobs:
       - name: 🔑 Docker Auth to GCR
         run: gcloud auth configure-docker
 
+      # --- Backend ---
+      - name: 🎯 Upload sourcemaps to Sentry (Backend)
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: institut-teknologi-sepuluh--sr
+          SENTRY_PROJECT: todolist-devops
+        run: |
+          npx sentry-cli releases new ${{ github.sha }}
+          npx sentry-cli releases files ${{ github.sha }} upload-sourcemaps dist \
+            --url-prefix "~/dist" \
+            --rewrite
+          npx sentry-cli releases finalize ${{ github.sha }}
+
+      - name: 🐳 Build Backend Docker Image
+        run: |
+          echo "Building backend image..."
+          docker build -f src/app/server/Dockerfile \
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} .
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
+
+      - name: 📤 Push Backend Docker Image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }}
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
+
+      - name: 🚀 Deploy Backend to Cloud Run
+        id: deploy-backend
+        run: |
+          echo "Deploying backend..."
+          BACKEND_URL=$(gcloud run deploy todo-backend$SUFFIX \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend$SUFFIX:${{ github.sha }} \
+            --platform managed \
+            --region ${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated \
+            --set-env-vars DB_HOST=${{ secrets.DB_HOST }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }} \
+            --format='value(status.url)')
+
+          echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
+          echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
+          echo "DEBUG: backend_url = $BACKEND_URL"
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
+
       # --- Frontend ---
       - name: 🐳 Build Frontend Docker Image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }} .
+          echo "Building Frontend with BACKEND_URL=${{ steps.deploy-backend.outputs.backend_url }}"
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL=${{ steps.deploy-backend.outputs.backend_url }} \
+            --build-arg NEXT_PUBLIC_FRONTEND_URL=https://todo-app${{ env.SUFFIX }}-381607765507.asia-southeast2.run.app \
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app${{ env.SUFFIX }}:${{ github.sha }} .
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
+
+      - name: 📤 Push Frontend Docker Image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }}
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
+
+      - name: 🚀 Deploy Frontend to Cloud Run
+        id: deploy-frontend
+        run: |
+          FRONTEND_URL=$(gcloud run deploy todo-app$SUFFIX \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app$SUFFIX:${{ github.sha }} \
+            --platform managed \
+            --region ${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated \
+            --format='value(status.url)')
+          echo "frontend_url=${FRONTEND_URL}" >> $GITHUB_OUTPUT
+        env:
+          SUFFIX: ${{ env.SUFFIX }}
 
       - name: 🎯 Upload sourcemaps to Sentry (Frontend)
         env:
@@ -85,67 +158,8 @@ jobs:
           SENTRY_ORG: institut-teknologi-sepuluh--sr
           SENTRY_PROJECT: todolist-devops
         run: |
-          docker run --rm \
-            -e SENTRY_AUTH_TOKEN \
-            -e SENTRY_ORG \
-            -e SENTRY_PROJECT \
-            gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }} \
-            npx sentry-cli releases new ${{ github.sha }} && \
-            npx sentry-cli releases files ${{ github.sha }} upload-sourcemaps .next \
-              --url-prefix "~/_next" \
-              --rewrite && \
-            npx sentry-cli releases finalize ${{ github.sha }}
-
-      - name: 📤 Push Frontend Docker Image
-        run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }}
-
-      - name: 🚀 Deploy Frontend to Cloud Run
-        id: deploy-frontend
-        run: |
-          FRONTEND_URL=$(gcloud run deploy todo-app \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-app:${{ github.sha }} \
-            --platform managed \
-            --region ${{ secrets.GCP_REGION }} \
-            --allow-unauthenticated \
-            --format='value(status.url)')
-          echo "frontend_url=${FRONTEND_URL}" >> $GITHUB_OUTPUT
-
-      # --- Backend ---
-      - name: 🐳 Build Backend Docker Image
-        run: |
-          docker build -f src/app/server/Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} .
-
-      - name: 📤 Push Backend Docker Image
-        run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }}
-
-      - name: 🚀 Deploy Backend to Cloud Run
-        id: deploy-backend
-        run: |
-          BACKEND_URL=$(gcloud run deploy todo-backend \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/todo-backend:${{ github.sha }} \
-            --platform managed \
-            --region ${{ secrets.GCP_REGION }} \
-            --allow-unauthenticated \
-            --format='value(status.url)')
-          echo "backend_url=${BACKEND_URL}" >> $GITHUB_OUTPUT
-
-      - name: 📦 Create GitHub Deployment
-        uses: bobheadxi/deployments@v1
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GH_PAT }}
-          env: production
-          ref: ${{ github.ref }}
-
-      - name: ✅ Finish GitHub Deployment
-        uses: bobheadxi/deployments@v1
-        with:
-          step: finish
-          token: ${{ secrets.GH_PAT }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env: production
-          status: success
-          env_url: ${{ steps.deploy-frontend.outputs.frontend_url }}
+          npx sentry-cli releases new ${{ github.sha }}
+          npx sentry-cli releases files ${{ github.sha }} upload-sourcemaps .next \
+            --url-prefix "~/_next" \
+            --rewrite
+          npx sentry-cli releases finalize ${{ github.sha }}

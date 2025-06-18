@@ -6,24 +6,42 @@ import { TodoRow } from "../types";
 const router = Router();
 
 router.get("/", async (_, res) => {
-  const [rows] = await db.query<TodoRow[]>(
-    "SELECT * FROM todos ORDER BY date DESC",
-  );
+  try {
+    const [rows] = await db.query<TodoRow[]>("SELECT * FROM todos");
 
-  res.json(rows);
+    res.json(rows);
+  } catch (err: any) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", detail: err.message });
+  }
 });
 
 router.post("/", async (req, res) => {
-  const { text, category, priority } = req.body;
+  try {
+    const { text, category, priority } = req.body;
+    const date = new Date().toISOString().split("T")[0];
 
-  const date = new Date().toISOString().split("T")[0];
+    const [result] = await db.query<any>(
+      "INSERT INTO todos (text, category, priority, date, completed) VALUES (?, ?, ?, ?, ?)",
+      [text, category, priority, date, false],
+    );
 
-  await db.query(
-    "INSERT INTO todos (text, category, priority, date, completed) VALUES (?, ?, ?, ?, ?)",
-    [text, category, priority, date, false],
-  );
+    const insertedId = result.insertId;
 
-  res.sendStatus(201);
+    const [rows] = await db.query<TodoRow[]>(
+      "SELECT * FROM todos WHERE id = ?",
+      [insertedId],
+    );
+
+    const newTodo = rows[0];
+
+    res.status(201).json(newTodo);
+  } catch (err: any) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", detail: err.message });
+  }
 });
 
 router.put("/:id", async (req, res) => {

@@ -13,24 +13,31 @@ import {
 
 import { categories, priorities } from "../lib/constants";
 
-type TodoFormProps = {
-  onAdd: (
+interface TodoFormProps {
+  onAddTodo: (
     text: string,
     category: string,
-    priority: "Low" | "Medium" | "High",
-  ) => void;
-};
+    priority: string,
+  ) => Promise<boolean>;
+}
 
-export function TodoForm({ onAdd }: TodoFormProps) {
+export function TodoForm({ onAddTodo }: TodoFormProps) {
   const [text, setText] = useState("");
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState<"" | "Low" | "Medium" | "High">("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || !category || !priority) return;
-    onAdd(text, category, priority);
-    setText("");
+
+    const success = await onAddTodo(text, category, priority);
+
+    if (success) {
+      setText("");
+      setCategory("");
+      setPriority("");
+    } else {
+    }
   };
 
   return (

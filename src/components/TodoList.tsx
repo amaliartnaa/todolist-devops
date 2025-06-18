@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   DndContext,
   closestCenter,
@@ -15,16 +15,24 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { BaseTodo as Todo } from "../lib/types";
+import { BaseTodo } from "../lib/types";
 
 import { TodoItem } from "./TodoItem";
 
 type TodoListProps = {
-  todos: Array<Todo>;
-  setTodos: (todos: Array<Todo>) => void;
+  todos: BaseTodo[];
+  setTodos: Dispatch<SetStateAction<BaseTodo[]>>;
+  onEdit: (
+    id: string,
+    text: string,
+    category: string,
+    priority: string,
+  ) => Promise<boolean>;
+
+  onDelete: (id: string) => Promise<void>;
 };
 
-export function TodoList({ todos, setTodos }: TodoListProps) {
+export function TodoList({ todos, setTodos, onEdit, onDelete }: TodoListProps) {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   const handleDragEnd = (event: any) => {
@@ -38,36 +46,10 @@ export function TodoList({ todos, setTodos }: TodoListProps) {
     }
   };
 
-  const handleEdit = (
-    id: string,
-    newText: string,
-    newCategory: string,
-    newPriority: "Low" | "Medium" | "High",
-  ) => {
-    const updated = todos.map((t) =>
-      t.id === id
-        ? {
-            ...t,
-            text: newText,
-            category: newCategory,
-            priority: newPriority,
-          }
-        : t,
-    );
-
-    setTodos(updated);
-  };
-
   const handleToggle = (id: string) => {
     const updated = todos.map((t) =>
       t.id === id ? { ...t, completed: !t.completed } : t,
     );
-
-    setTodos(updated);
-  };
-
-  const handleDelete = (id: string) => {
-    const updated = todos.filter((t) => t.id !== id);
 
     setTodos(updated);
   };
@@ -87,8 +69,8 @@ export function TodoList({ todos, setTodos }: TodoListProps) {
             <TodoItem
               key={todo.id}
               todo={todo}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
+              onDelete={onDelete}
+              onEdit={onEdit}
               onToggle={handleToggle}
             />
           ))}
