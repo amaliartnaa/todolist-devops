@@ -38,7 +38,7 @@ app.get("/", (_, res) => {
   res.send("🚀 Todo backend is up and running!");
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
 app.use(Sentry.Handlers.errorHandler());
 
