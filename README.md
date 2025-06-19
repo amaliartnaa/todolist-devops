@@ -2,6 +2,8 @@
 
 A full-stack To Do List application built with **Next.js 14**, **Tailwind CSS**, **Node.js**, **Docker**, and **Google Cloud Run**. It features robust CI/CD using GitHub Actions and Sentry integration for monitoring.
 
+🔗 [View Live Demo on Cloud Run](https://todo-app-381607765507.asia-southeast2.run.app/)
+
 ---
 
 ## 👥 Team Members
