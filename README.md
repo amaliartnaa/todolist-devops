@@ -245,9 +245,11 @@ Deploy ke Cloud Run
 
 ## 🔧 Tech Stack
 
-* **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+* **Frontend**: Next.js 14, TypeScript, Tailwind CSS, HeroUI
 * **Backend**: Node.js, Express
+* **Database**: MySQL (Cloud SQL)
 * **Deployment**: Google Cloud Run, Cloud Build
+* **Containerization**: Docker
 * **CI/CD**: GitHub Actions
 * **Monitoring**: Sentry
 * **Testing**: Vitest
