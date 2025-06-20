@@ -22,85 +22,86 @@ For complete documentation and deeper technical insights into the project, see t
 ## 🏗️ Project Structure
 
 ```
-.
-├── .github/workflows/
-│   └── ci-cd.yml
-├── .husky/
+.                           # Root directory
+├── .github/workflows/      # GitHub Actions workflows for CI/CD
+│   └── ci-cd.yml           # CI/CD pipeline config
+├── .husky/                 # Git hooks for enforcing commit standards
 │   ├── commit-msg
 │   ├── post-merge
 │   └── pre-commit
-├── .vscode/
+├── .vscode/                # VSCode project-specific settings
 │   └── settings.json
-├── dist/
+├── dist/                   # Output from backend TypeScript compilation
 │   └── app/server/
 │       ├── routes/
-│       │   └── todos.js
-│       ├── db.js
-│       ├── index.js
-│       └── types.js
-├── public/
+│       │   └── todos.js    # Compiled route handler
+│       ├── db.js           # Compiled DB config
+│       ├── index.js        # Compiled Express entry point
+│       └── types.js        # Compiled backend type definitions
+├── public/                 # Static files served by Next.js
 │   ├── favicon.ico
 │   ├── next.svg
 │   └── vercel.svg
-├── src/
+├── src/                    # Main application source code
 │   ├── app/
-│   │   ├── server/
-│   │   │   ├── Dockerfile
-│   │   │   ├── routes/
+│   │   ├── server/         # Backend server logic (Express.js)
+│   │   │   ├── Dockerfile  # Dockerfile for backend image
+│   │   │   ├── routes/     # Backend route handlers
 │   │   │   │   └── todos.ts
-│   │   │   ├── db.ts
-│   │   │   ├── index.ts
-│   │   │   └── types.ts
-│   │   ├── error.tsx
-│   │   ├── global-error.tsx
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── providers.tsx
-│   ├── components/
+│   │   │   ├── db.ts       # Database config and connection
+│   │   │   ├── index.ts    # Entry point for Express backend
+│   │   │   └── types.ts    # Type definitions for backend
+│   │   ├── error.tsx       # Custom error page
+│   │   ├── global-error.tsx# Error boundary for client
+│   │   ├── layout.tsx      # Root layout component
+│   │   ├── page.tsx        # Main homepage
+│   │   └── providers.tsx   # Context and theme providers
+│   ├── components/         # UI components for frontend
+|   |   └── tests/          # Additional unit tests with Vitest
+│   │       └── TodoList.test.tsx
 │   │   ├── FilterBar.tsx
 │   │   ├── Navbar.tsx
 │   │   ├── TodoForm.tsx
 │   │   ├── TodoItem.tsx
 │   │   ├── TodoList.tsx
-│   │   └── primitives.ts
-│   ├── config/
+│   │   └── primitives.ts   # Low-level UI primitives
+│   ├── config/             # Configuration values
 │   │   ├── fonts.ts
 │   │   └── site.ts
-│   ├── lib/
-│   │   ├── api.ts
-│   │   ├── constants.ts
-│   │   ├── types.ts
-│   │   └── utils.ts
-│   ├── styles/
+│   ├── lib/                # Utility functions and types
+│   │   ├── api.ts          # API communication helpers
+│   │   ├── constants.ts    # Shared constants
+│   │   ├── types.ts        # Shared types between backend/frontend
+│   │   └── utils.ts        # Utility functions
+│   ├── styles/             # CSS and global styling
 │   │   └── globals.css
-│   └── types/
+│   └── types/              # Project-wide type definitions
 │       └── index.ts
-├── tests/
+├── tests/                  # Unit tests with Vitest
 │   └── TodoList.test.tsx
-├── .dockerignore
-├── .env
-├── .env.dev
-├── .gitignore
-├── .prettierignore
-├── .prettierrc
+├── .dockerignore           # Files ignored by Docker
+├── .gitignore              # Files ignored by Git
+├── .prettierignore         # Files ignored by Prettier
+├── .prettierrc             # Prettier config
+├── Dockerfile              # Dockerfile for frontend image
 ├── README.md
-├── cloudbuild-be.yaml
-├── cloudbuild-fe.yaml
-├── commitlint.config.js
-├── eslint.config.mjs
-├── instrumentation-client.ts
-├── instrumentation.ts
-├── next.config.js
-├── package.json
-├── pnpm-lock.yaml
-├── postcss.config.js
-├── sentry.edge.config.ts
-├── sentry.server.config.ts
-├── setupTests.js
-├── tailwind.config.js
-├── tsconfig.json
-├── tsconfig.server.json
-├── vitest.config.ts
+├── cloudbuild-be.yaml      # GCP Cloud Build config (backend)
+├── cloudbuild-fe.yaml      # GCP Cloud Build config (frontend)
+├── commitlint.config.js    # Lint commit messages
+├── eslint.config.mjs       # ESLint rules
+├── instrumentation-client.ts # Client-side Sentry setup
+├── instrumentation.ts      # Server-side Sentry setup
+├── next.config.js          # Next.js config
+├── package.json            # Project metadata and scripts
+├── pnpm-lock.yaml          # PNPM lockfile
+├── postcss.config.js       # PostCSS config
+├── sentry.edge.config.ts   # Sentry edge runtime config
+├── sentry.server.config.ts # Sentry server runtime config
+├── setupTests.js           # Vitest setup file
+├── tailwind.config.js      # Tailwind CSS config
+├── tsconfig.json           # TypeScript config (frontend)
+├── tsconfig.server.json    # TypeScript config (backend)
+├── vitest.config.ts        # Vitest test config
 ```
 
 ---
